@@ -6,16 +6,16 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HelloWorldControllerTest {
+class HelloWorldControllerTest {
 
     private final HelloWorldController helloWorldController = new HelloWorldController();
 
     @Test
-    public void shouldReturnHelloWorldAndStatusOk() {
-        ResponseEntity<String> expectedResponse = helloWorldController.helloWorld();
+    void shouldReturnHelloWorldAndStatusOk() {
+        ResponseEntity<String> actualResponse = helloWorldController.helloWorld();
 
-        assertEquals(HttpStatus.OK, expectedResponse.getStatusCode());
-        assertEquals("Hello World! Sippar caminhões", expectedResponse.getBody());
+        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
+        assertEquals("Hello World! Sippar caminhões", actualResponse.getBody());
     }
 
 }
