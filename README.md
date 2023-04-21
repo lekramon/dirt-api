@@ -19,6 +19,6 @@ the API registers these transactions in the database for future treatment.
 - The transaction API is responsible for the CRUD (Create, Read, Update, and Delete) of transactions and calls the
   database to store the information.
 
-- A batch processing job is responsible for generating transaction files.
+- A batch processing job is responsible for generating report files containing transaction information of accounts.
 
 - There is a mocked service (in pink) available to simulate a notification system.
