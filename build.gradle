@@ -14,7 +14,9 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.11.2'
+    testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '7.11.2'
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.11.2'
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '7.11.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
