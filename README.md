@@ -26,3 +26,9 @@ the API registers these transactions in the database for future treatment.
 The database modelling diagram:
 
 ![Database](./src/main/resources/images/database.png)
+
+The status for transaction are:
+
+![Status](./src/main/resources/images/status.png)
+
+The transaction status always starts as pending and can go to success or cancelled, and cannot be changed later.
