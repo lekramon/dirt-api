@@ -1,0 +1,23 @@
+services:
+
+  # Oracle service (label used to access the service container)
+  oracle:
+
+    # Docker Hub image (feel free to change the tag "latest" to any other available one)
+    image: gvenzl/oracle-xe:latest
+
+    # Provide passwords and other environment variables to container
+    env:
+      ORACLE_PASSWORD: 123
+      ORACLE_DATABASE: DIRT
+
+    # Forward Oracle port
+    ports:
+      - 1521:1521
+
+    # Provide healthcheck script options for startup
+    options: >-
+      --health-cmd healthcheck.sh
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 10
