@@ -1,18 +1,11 @@
-version: "3"
+version: '3.8'
+
 services:
-
-  # Oracle service (label used to access the service container)
-  database:
-
-    # Docker Hub image (feel free to change the tag "latest" to any other available one)
+  oracle_db:
     image: gvenzl/oracle-xe:latest
-
-    # Provide passwords and other environment variables to container
     environment:
-      ORACLE_RANDOM_PASSWORD: true
-      APP_USER: my_user
-      APP_USER_PASSWORD: my_password_which_I_really_should_change
-
-    # Forward Oracle port
+      ORACLE_PASSWORD: sippar
     ports:
       - 1521:1521
+    volumes:
+      - /opt/oracle/oradata
