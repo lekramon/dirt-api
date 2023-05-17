@@ -15,7 +15,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'com.oracle.database.jdbc', name: 'ojdbc8', version: '12.2.0.1'
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.18.0'
     testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '7.11.2'
     testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.11.2'
     testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '7.11.2'
