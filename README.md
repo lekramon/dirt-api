@@ -22,3 +22,13 @@ the API registers these transactions in the database for future treatment.
 - A batch processing job is responsible for generating report files containing transaction information of accounts.
 
 - There is a mocked service (in pink) available to simulate a notification system.
+
+The database modelling diagram:
+
+![Database](./src/main/resources/images/database.png)
+
+The status for transaction are:
+
+![Status](./src/main/resources/images/status.png)
+
+The transaction status always starts as pending and can go to success or cancelled, and cannot be changed later.
