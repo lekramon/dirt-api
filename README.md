@@ -11,7 +11,7 @@ the API registers these transactions in the database for future treatment.
 ### Summary
 
 - [Architecture](#architecture);
-- [Installation (Docker)](#running-docker-and-the-application);
+- [Installation (Docker)](#running-docker);
 - [Database Connection](#database-connection);
 
 ### Architecture
