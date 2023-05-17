@@ -4,7 +4,9 @@ services:
   oracle_db:
     image: gvenzl/oracle-xe:latest
     environment:
-      ORACLE_PASSWORD: sippar
+      ORACLE_PASSWORD: admin
+      APP_USER: DIRT
+      APP_USER_PASSWORD: sippar123
     ports:
       - 1521:1521
     volumes:
