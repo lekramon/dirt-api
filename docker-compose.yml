@@ -1,0 +1,16 @@
+version: '3.8'
+
+volumes:
+  oradata:
+
+services:
+  oracle_db:
+    image: gvenzl/oracle-xe:latest
+    volumes:
+      - oradata:/opt/oracle/oradata
+    environment:
+      ORACLE_PASSWORD: admin
+      APP_USER: DIRT
+      APP_USER_PASSWORD: sippar123
+    ports:
+      - 1521:1521
