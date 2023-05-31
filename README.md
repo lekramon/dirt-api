@@ -64,3 +64,5 @@ This repository contains the necessary files for performing a database migration
 For more detailed information about FlyWay and its commands, refer to the official [FlyWay documentation](https://flywaydb.org/documentation/).
 
 Running the application will activate FlyWay and create the schema present in [V1.1__MODELING_TABLES_RG_6401.sql](./src/main/resources/db/migration/V1.1__MODELING_TABLES_RG_6401.sql) and populate account using [V1.2__INSERT_TABLES_RG_6401.sql](./src/main/resources/db/migration/V1.2__INSERT_TABLES_RG_6401.sql).
+
+---
