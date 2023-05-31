@@ -13,6 +13,7 @@ the API registers these transactions in the database for future treatment.
 - [Architecture](#architecture);
 - [Installation (Docker)](#running-docker);
 - [Database Connection](#database-connection);
+- [FlyWay Migration](#flyway-migration);
 
 ### Architecture
 
@@ -56,3 +57,10 @@ The transaction status always starts as pending and can go to success or cancell
 In some database administration tools, the default connection is made using SID (System Identifier), which can be changed to URL or Service Name. However, if you are unable to connect using URL or Service Name, you should pay attention to the identifier of the PDB (Pluggable Database), which is typically set as SID connection like: `jdbc:oracle:thin:@localhost:1521:XEPDB1`, resulting in the [ORA-12505 error](https://docs.oracle.com/en/database/oracle/oracle-database/19/errmg/ORA-12500.html#GUID-BD6AAC21-3F15-4F70-B3C5-064ADCF5EC51), This occurs because of the use of " :  " in the connection with an unknown SID. In this case, it is necessary to use Service Name connection " / ". example: `jdbc:oracle:thin:@localhost:1521/XEPDB1`.
 
 ---
+
+##### FlyWay Migration
+
+This repository contains the necessary files for performing a database migration using FlyWay. All version scripts are located in the `db/migration` directory and comply with the [naming scheme]((https://flywaydb.org/documentation/migrations#naming)) defined by FlyWay.
+For more detailed information about FlyWay and its commands, refer to the official [FlyWay documentation](https://flywaydb.org/documentation/).
+
+Running the application will activate FlyWay and create the schema present in [V1.1__MODELING_TABLES_RG_6401.sql](./src/main/resources/db/migration/V1.1__MODELING_TABLES_RG_6401.sql) and populate account using [V1.2__INSERT_TABLES_RG_6401.sql](./src/main/resources/db/migration/V1.2__INSERT_TABLES_RG_6401.sql).
