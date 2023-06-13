@@ -7,7 +7,7 @@ public class TransactionRequest {
     private String ip;
     private Double amount;
     private Double tax;
-    private String accountId;
+    private int accountId;
     private String description;
     private CaptureMethodRequest captureMethodRequest;
     private TransactionTypeEnum transactionType;
@@ -38,11 +38,11 @@ public class TransactionRequest {
         this.tax = tax;
     }
 
-    public String getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
