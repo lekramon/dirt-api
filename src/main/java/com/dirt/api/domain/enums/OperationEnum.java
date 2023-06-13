@@ -2,8 +2,7 @@ package com.dirt.api.domain.enums;
 
 public enum OperationEnum {
 
-    CREDIT(1),
-    DEBIT(2);
+    CREDIT(1), DEBIT(2);
 
     private final int operation;
 
