@@ -2,7 +2,7 @@ package com.dirt.api.adapter.controller;
 
 
 import com.dirt.api.adapter.dto.request.TransactionRequest;
-import com.dirt.api.domain.entity.Transaction;
+import com.dirt.api.domain.entity.TransactionEntity;
 import com.dirt.api.usecase.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Transaction> registerTransaction(@RequestBody TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionEntity> registerTransaction(@RequestBody TransactionRequest transactionRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.register(transactionRequest));
     }
 }
