@@ -1,5 +1,10 @@
 package com.dirt.api.domain.entity;
 
+import com.dirt.api.domain.enums.CaptureMethodEnum;
+import com.dirt.api.domain.enums.OperationEnum;
+import com.dirt.api.domain.enums.StatusEnum;
+import com.dirt.api.domain.enums.TransactionTypeEnum;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -30,24 +35,24 @@ public class Transaction {
     @Column(name = "IDT_CAPTURE_METHOD")
     private String transactionCaptureMethod;
 
-    @ManyToOne
-    @JoinColumn(name = "COD_CAPTURE_METHOD_TYPE")
-    private CaptureMethod captureMethod;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "COD_CAPTURE_METHOD_TYPE")
+    private CaptureMethodEnum captureMethod;
 
-    @ManyToOne
-    @JoinColumn(name = "COD_TRANSACTION_TYPE")
-    private TransactionType transactionType;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "COD_TRANSACTION_TYPE")
+    private TransactionTypeEnum transactionType;
 
-    @ManyToOne
-    @JoinColumn(name = "COD_OPERATION")
-    private Operation operation;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "COD_OPERATION")
+    private OperationEnum operation;
 
     @Column(name = "DAT_TRANSACTION")
     private Timestamp transactionDat;
 
-    @ManyToOne
-    @JoinColumn(name = "COD_STATUS")
-    private Status status;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "COD_STATUS")
+    private StatusEnum status;
 
     @Column(name = "NUM_OTHER_ACCOUNT")
     private String transactionOtherAccount;
@@ -114,27 +119,27 @@ public class Transaction {
         this.transactionCaptureMethod = transactionCaptureMethod;
     }
 
-    public CaptureMethod getCaptureMethod() {
+    public CaptureMethodEnum getCaptureMethod() {
         return captureMethod;
     }
 
-    public void setCaptureMethod(CaptureMethod captureMethod) {
+    public void setCaptureMethod(CaptureMethodEnum captureMethod) {
         this.captureMethod = captureMethod;
     }
 
-    public TransactionType getTransactionType() {
+    public TransactionTypeEnum getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
+    public void setTransactionType(TransactionTypeEnum transactionType) {
         this.transactionType = transactionType;
     }
 
-    public Operation getOperation() {
+    public OperationEnum getOperation() {
         return operation;
     }
 
-    public void setOperation(Operation operation) {
+    public void setOperation(OperationEnum operation) {
         this.operation = operation;
     }
 
@@ -146,11 +151,11 @@ public class Transaction {
         this.transactionDat = transactionDat;
     }
 
-    public Status getStatus() {
+    public StatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(StatusEnum status) {
         this.status = status;
     }
 
