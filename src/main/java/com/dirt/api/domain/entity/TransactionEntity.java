@@ -51,7 +51,7 @@ public class TransactionEntity {
     @Column(name = "DAT_TRANSACTION")
     private Timestamp transactionDat;
 
-    @Enumerated(EnumType.ORDINAL)
+
     @Column(name = "COD_STATUS")
     private StatusEnum status;
 
