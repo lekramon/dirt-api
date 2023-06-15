@@ -26,8 +26,9 @@ public class TransactionEntity {
     @Column(name = "NUM_TAX")
     private double transactionTax;
 
-    @Column(name = "IDT_ACCOUNT")
-    private long transactionAccount;
+    @ManyToOne
+    @JoinColumn(name = "IDT_ACCOUNT")
+    private AccountEntity transactionAccount;
 
     @Column(name = "DES_TRANSACTION")
     private String transactionDes;
@@ -95,11 +96,11 @@ public class TransactionEntity {
         this.transactionTax = transactionTax;
     }
 
-    public long getTransactionAccount() {
+    public AccountEntity getTransactionAccount() {
         return transactionAccount;
     }
 
-    public void setTransactionAccount(long transactionAccount) {
+    public void setTransactionAccount(AccountEntity transactionAccount) {
         this.transactionAccount = transactionAccount;
     }
 
