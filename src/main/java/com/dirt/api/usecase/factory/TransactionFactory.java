@@ -13,7 +13,7 @@ import java.time.ZoneId;
 public class TransactionFactory {
 
     public TransactionEntity registerTransaction(TransactionRequest transactionRequest) {
-        LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TransactionEntity transactionEntity = new TransactionEntity();
         CaptureMethodRequest captureMethodRequest = transactionRequest.getCaptureMethodRequest();
         OtherAccountRequest otherAccountRequest = transactionRequest.getOtherAccountRequest();
@@ -21,11 +21,12 @@ public class TransactionFactory {
         transactionEntity.setTransactionAmount(transactionRequest.getAmount());
         transactionEntity.setTransactionTax(transactionRequest.getTax());
         transactionEntity.setTransactionAccount(transactionRequest.getAccountId());
+        transactionEntity.setTransactionDes(transactionRequest.getDescription());
         transactionEntity.setTransactionCaptureMethod(captureMethodRequest.getId());
         transactionEntity.setCaptureMethod(captureMethodRequest.getType());
         transactionEntity.setTransactionType(transactionRequest.getTransactionType());
         transactionEntity.setOperation(transactionRequest.getOperation());
-        transactionEntity.setTransactionDat(Timestamp.valueOf(dateTime));
+        transactionEntity.setTransactionDat(timestamp);
         transactionEntity.setStatus(StatusEnum.PENDING);
         transactionEntity.setTransactionOtherAccount(otherAccountRequest.getNumber());
         transactionEntity.setTransactionOtherAccountAgency(otherAccountRequest.getAgency());
