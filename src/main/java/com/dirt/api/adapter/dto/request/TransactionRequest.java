@@ -9,10 +9,10 @@ public class TransactionRequest {
     private Double tax;
     private Long accountId;
     private String description;
-    private CaptureMethodRequest captureMethodRequest;
+    private CaptureMethodDto captureMethodDto;
     private TransactionTypeEnum transactionType;
     private OperationEnum operation;
-    private OtherAccountRequest otherAccountRequest;
+    private OtherAccountDto otherAccountDto;
 
     public String getIp() {
         return ip;
@@ -54,12 +54,12 @@ public class TransactionRequest {
         this.description = description;
     }
 
-    public CaptureMethodRequest getCaptureMethodRequest() {
-        return captureMethodRequest;
+    public CaptureMethodDto getCaptureMethodRequest() {
+        return captureMethodDto;
     }
 
-    public void setCaptureMethodRequest(CaptureMethodRequest captureMethodRequest) {
-        this.captureMethodRequest = captureMethodRequest;
+    public void setCaptureMethodRequest(CaptureMethodDto captureMethodDto) {
+        this.captureMethodDto = captureMethodDto;
     }
 
     public TransactionTypeEnum getTransactionType() {
@@ -78,11 +78,11 @@ public class TransactionRequest {
         this.operation = operation;
     }
 
-    public OtherAccountRequest getOtherAccountRequest() {
-        return otherAccountRequest;
+    public OtherAccountDto getOtherAccountRequest() {
+        return otherAccountDto;
     }
 
-    public void setOtherAccountRequest(OtherAccountRequest otherAccountRequest) {
-        this.otherAccountRequest = otherAccountRequest;
+    public void setOtherAccountRequest(OtherAccountDto otherAccountDto) {
+        this.otherAccountDto = otherAccountDto;
     }
 }

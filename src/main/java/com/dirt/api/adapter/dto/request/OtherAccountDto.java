@@ -1,6 +1,6 @@
 package com.dirt.api.adapter.dto.request;
 
-public class OtherAccountRequest {
+public class OtherAccountDto {
 
     private String number;
     private String agency;

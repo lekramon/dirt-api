@@ -2,7 +2,7 @@ package com.dirt.api.adapter.dto.request;
 
 import com.dirt.api.domain.enums.CaptureMethodEnum;
 
-public class CaptureMethodRequest {
+public class CaptureMethodDto {
 
     private String id;
     private CaptureMethodEnum type;
