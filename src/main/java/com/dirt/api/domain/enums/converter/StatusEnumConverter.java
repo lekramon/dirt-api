@@ -1,7 +1,7 @@
-package com.dirt.api.adapter.converter;
+package com.dirt.api.domain.enums.converter;
 
 import com.dirt.api.domain.enums.StatusEnum;
-import com.dirt.api.domain.exception.StatusNotExistException;
+import com.dirt.api.domain.exception.EnumNotExistException;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -19,7 +19,7 @@ public class StatusEnumConverter implements AttributeConverter<StatusEnum, Integ
             case SUCCESS:
                 return 3;
             default:
-                throw new StatusNotExistException("The status: " + statusEnum + " doesn't exist");
+                throw new EnumNotExistException("The status: " + statusEnum + " doesn't exist");
         }
     }
 
@@ -33,7 +33,7 @@ public class StatusEnumConverter implements AttributeConverter<StatusEnum, Integ
             case 3:
                 return StatusEnum.SUCCESS;
             default:
-                throw new StatusNotExistException("The status: " + status + " doesn't exist");
+                throw new EnumNotExistException("The status: " + status + " doesn't exist");
         }
     }
 }
