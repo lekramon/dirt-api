@@ -36,15 +36,15 @@ public class TransactionEntity {
     @Column(name = "IDT_CAPTURE_METHOD")
     private String transactionCaptureMethod;
 
-    @Enumerated(EnumType.ORDINAL)
+
     @Column(name = "COD_CAPTURE_METHOD_TYPE")
     private CaptureMethodEnum captureMethod;
 
-    @Enumerated(EnumType.ORDINAL)
+
     @Column(name = "COD_TRANSACTION_TYPE")
     private TransactionTypeEnum transactionType;
 
-    @Enumerated(EnumType.ORDINAL)
+
     @Column(name = "COD_OPERATION")
     private OperationEnum operation;
 
