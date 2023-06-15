@@ -11,29 +11,21 @@ public class StatusEnumConverter implements AttributeConverter<StatusEnum, Integ
 
     @Override
     public Integer convertToDatabaseColumn(StatusEnum statusEnum) {
-        switch (statusEnum) {
-            case PENDING:
-                return 1;
-            case CANCELED:
-                return 2;
-            case SUCCESS:
-                return 3;
-            default:
-                throw new EnumNotExistException("The status: " + statusEnum + " doesn't exist");
+
+        if (statusEnum == null) {
+            return null;
         }
+        return statusEnum.getCodStatus();
     }
 
     @Override
     public StatusEnum convertToEntityAttribute(Integer status) {
-        switch (status) {
-            case 1:
-                return StatusEnum.PENDING;
-            case 2:
-                return StatusEnum.CANCELED;
-            case 3:
-                return StatusEnum.SUCCESS;
-            default:
-                throw new EnumNotExistException("The status: " + status + " doesn't exist");
+
+        if (status == null) {
+            return null;
         }
+
+        return StatusEnum.fromCode(status);
+
     }
 }
