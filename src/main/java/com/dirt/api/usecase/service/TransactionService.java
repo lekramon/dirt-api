@@ -31,7 +31,7 @@ public class TransactionService {
     private AccountEntity getAccountEntityById(long id) {
         final Optional<AccountEntity> accountEntity = accountRepository.findById(id);
         if (accountEntity.isEmpty()) {
-            throw new AccountNotExistException("This account id does not exist");
+            throw new AccountNotExistException("This account id: " + id + " doesn't exist");
         }
         return accountEntity.get();
     }
