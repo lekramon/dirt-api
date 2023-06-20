@@ -5,7 +5,10 @@ import com.dirt.api.adapter.dto.request.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
 import com.dirt.api.domain.entity.AccountEntity;
 import com.dirt.api.domain.entity.TransactionEntity;
+import com.dirt.api.domain.enums.CaptureMethodEnum;
+import com.dirt.api.domain.enums.OperationEnum;
 import com.dirt.api.domain.enums.StatusEnum;
+import com.dirt.api.domain.enums.TransactionTypeEnum;
 
 import java.sql.Timestamp;
 
@@ -22,14 +25,14 @@ public class TransactionFactory {
         transactionEntity.setTransactionAccount(accountEntity);
         transactionEntity.setTransactionDes(transactionRequest.getDescription());
         transactionEntity.setTransactionCaptureMethod(captureMethodDto.getId());
-        transactionEntity.setCaptureMethod(captureMethodDto.getType());
-        transactionEntity.setTransactionType(transactionRequest.getTransactionType());
-        transactionEntity.setOperation(transactionRequest.getOperation());
+        transactionEntity.setCaptureMethod(CaptureMethodEnum.fromCode(captureMethodDto.getType()));
+        transactionEntity.setTransactionType(TransactionTypeEnum.fromCode(transactionRequest.getTransactionType()));
+        transactionEntity.setOperation(OperationEnum.fromCode(transactionRequest.getOperation()));
         transactionEntity.setTransactionDat(timestamp);
-        transactionEntity.setStatus(StatusEnum.PENDING);
         transactionEntity.setTransactionOtherAccount(otherAccountDto.getNumber());
         transactionEntity.setTransactionOtherAccountAgency(otherAccountDto.getAgency());
         transactionEntity.setTransactionOtherAccountBank(otherAccountDto.getBankCode());
+        transactionEntity.setStatus(StatusEnum.fromCode(1));
         return transactionEntity;
     }
 }
