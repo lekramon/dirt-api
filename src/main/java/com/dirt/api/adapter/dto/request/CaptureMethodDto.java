@@ -1,11 +1,9 @@
 package com.dirt.api.adapter.dto.request;
 
-import com.dirt.api.domain.enums.CaptureMethodEnum;
-
 public class CaptureMethodDto {
 
     private String id;
-    private CaptureMethodEnum type;
+    private int type;
 
     public String getId() {
         return id;
@@ -15,11 +13,11 @@ public class CaptureMethodDto {
         this.id = id;
     }
 
-    public CaptureMethodEnum getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(CaptureMethodEnum type) {
+    public void setType(int type) {
         this.type = type;
     }
 }
