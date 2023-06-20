@@ -1,8 +1,5 @@
 package com.dirt.api.adapter.dto.request;
 
-import com.dirt.api.domain.enums.OperationEnum;
-import com.dirt.api.domain.enums.TransactionTypeEnum;
-
 public class TransactionRequest {
     private String ip;
     private Double amount;
@@ -10,8 +7,8 @@ public class TransactionRequest {
     private Long accountId;
     private String description;
     private CaptureMethodDto captureMethodDto;
-    private TransactionTypeEnum transactionType;
-    private OperationEnum operation;
+    private int transactionType;
+    private int operation;
     private OtherAccountDto otherAccountDto;
 
     public String getIp() {
@@ -62,19 +59,19 @@ public class TransactionRequest {
         this.captureMethodDto = captureMethodDto;
     }
 
-    public TransactionTypeEnum getTransactionType() {
+    public int getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(TransactionTypeEnum transactionType) {
+    public void setTransactionType(int transactionType) {
         this.transactionType = transactionType;
     }
 
-    public OperationEnum getOperation() {
+    public int getOperation() {
         return operation;
     }
 
-    public void setOperation(OperationEnum operation) {
+    public void setOperation(int operation) {
         this.operation = operation;
     }
 
