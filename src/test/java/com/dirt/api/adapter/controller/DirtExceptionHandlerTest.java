@@ -20,7 +20,7 @@ class DirtExceptionHandlerTest {
         EnumNotExistException exception = new EnumNotExistException("message");
 
         ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEnum(exception);
-        ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleTransactionRequestEnumNotExitException(exception);
+        ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         Assertions.assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
@@ -32,7 +32,7 @@ class DirtExceptionHandlerTest {
         AccountNotExistException exception = new AccountNotExistException("message");
 
         ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseAccount(exception);
-        ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleAccountNotExistException(exception);
+        ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         Assertions.assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
