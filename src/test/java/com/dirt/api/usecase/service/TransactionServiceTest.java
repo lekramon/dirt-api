@@ -57,7 +57,7 @@ class TransactionServiceTest {
     @Test
     public void shouldRegisterTransaction() {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
-        when(transactionFactory.registerTransaction(any(TransactionRequest.class), any(AccountEntity.class))).thenReturn(getTransactionEntity());
+        when(transactionFactory.getTransaction(any(TransactionRequest.class), any(AccountEntity.class))).thenReturn(getTransactionEntity());
         when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
 
         TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, 1));
