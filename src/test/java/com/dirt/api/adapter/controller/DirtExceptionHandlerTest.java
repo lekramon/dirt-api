@@ -9,14 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
 
 class DirtExceptionHandlerTest {
 
     private final DirtExceptionHandler dirtExceptionHandler = new DirtExceptionHandler();
-
-    private final ErrorResponse errorResponse = mock(ErrorResponse.class);
-
 
     @Test
     public void shouldHandleTransactionRequestEnumNotExistException() {
