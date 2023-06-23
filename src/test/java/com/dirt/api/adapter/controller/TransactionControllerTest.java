@@ -97,7 +97,7 @@ class TransactionControllerTest {
 
     private TransactionRequest getTransactionRequest() {
         CaptureMethodDto captureMethodDto = new CaptureMethodDto();
-        captureMethodDto.setId("1234");
+        captureMethodDto.setCaptureMethodId("1234");
         captureMethodDto.setType(1);
 
         OtherAccountDto otherAccountDto = new OtherAccountDto();

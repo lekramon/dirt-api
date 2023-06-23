@@ -90,7 +90,7 @@ class TransactionServiceTest {
 
     private TransactionRequest getTransactionRequest(long accountId, int operation) {
         CaptureMethodDto captureMethodDto = new CaptureMethodDto();
-        captureMethodDto.setId(TRANSACTION_CAPTURE_METHOD);
+        captureMethodDto.setCaptureMethodId(TRANSACTION_CAPTURE_METHOD);
         captureMethodDto.setType(1);
 
         OtherAccountDto otherAccountDto = new OtherAccountDto();

@@ -24,7 +24,7 @@ public class TransactionFactory {
         transactionEntity.setTransactionTax(transactionRequest.getTax());
         transactionEntity.setTransactionAccount(accountEntity);
         transactionEntity.setTransactionDes(transactionRequest.getDescription());
-        transactionEntity.setTransactionCaptureMethod(captureMethodDto.getId());
+        transactionEntity.setTransactionCaptureMethod(captureMethodDto.getCaptureMethodId());
         transactionEntity.setCaptureMethod(CaptureMethodEnum.fromCode(captureMethodDto.getType()));
         transactionEntity.setTransactionType(TransactionTypeEnum.fromCode(transactionRequest.getTransactionType()));
         transactionEntity.setOperation(OperationEnum.fromCode(transactionRequest.getOperation()));

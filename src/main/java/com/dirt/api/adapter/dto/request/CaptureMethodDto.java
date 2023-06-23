@@ -1,16 +1,19 @@
 package com.dirt.api.adapter.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CaptureMethodDto {
 
-    private String id;
+    @JsonProperty("id")
+    private String captureMethodId;
     private int type;
 
-    public String getId() {
-        return id;
+    public String getCaptureMethodId() {
+        return captureMethodId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCaptureMethodId(String captureMethodId) {
+        this.captureMethodId = captureMethodId;
     }
 
     public int getType() {
