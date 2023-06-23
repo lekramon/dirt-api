@@ -50,8 +50,4 @@ class DirtExceptionHandlerTest {
     private ResponseEntity<ErrorResponse> getErrorResponseAccount(AccountNotExistException exception) {
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
     }
-
-    private ErrorResponse errorResponse(String message) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "message");
-    }
 }
