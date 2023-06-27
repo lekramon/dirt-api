@@ -1,32 +1,42 @@
 package com.dirt.api.adapter.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.NotNull;
+
 public class OtherAccountDto {
 
-    private String number;
-    private String agency;
-    private String bankCode;
+    @JsonProperty("number")
+    @NotNull(message = "Invalid accountNumber")
+    private String accountNumber;
+    @JsonProperty("agency")
+    @NotNull(message = "Invalid accountAgency")
+    private String accountAgency;
+    @JsonProperty("bankCode")
+    @NotNull(message = "Invalid accountBankCode")
+    private String accountBankCode;
 
-    public String getNumber() {
-        return number;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public String getAgency() {
-        return agency;
+    public String getAccountAgency() {
+        return accountAgency;
     }
 
-    public void setAgency(String agency) {
-        this.agency = agency;
+    public void setAccountAgency(String accountAgency) {
+        this.accountAgency = accountAgency;
     }
 
-    public String getBankCode() {
-        return bankCode;
+    public String getAccountBankCode() {
+        return accountBankCode;
     }
 
-    public void setBankCode(String bankCode) {
-        this.bankCode = bankCode;
+    public void setAccountBankCode(String accountBankCode) {
+        this.accountBankCode = accountBankCode;
     }
 }
