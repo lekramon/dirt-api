@@ -5,24 +5,27 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class TransactionRequest {
 
-    @NotBlank(message = "Invalid ip")
+    @NotBlank(message = "Invalid ip, cannot be blank")
+    @Size(max = 15, message = "The ip size must be have max 15 characters")
     private String ip;
-    @NotNull(message = "Invalid amount")
+    @NotNull(message = "Invalid amount, cannot be null")
     private Double amount;
-    @NotNull(message = "Invalid tax")
+    @NotNull(message = "Invalid tax, cannot be null")
     private Double tax;
-    @NotNull(message = "Invalid account")
+    @NotNull(message = "Invalid account, cannot be null")
     private Long accountId;
-    @NotBlank(message = "Invalid description")
+    @NotBlank(message = "Invalid description, cannot be blank")
+    @Size(max = 100, message = "The description size must be have max 100 characters")
     private String description;
     @Valid
     private CaptureMethodDto captureMethod;
-    @Range(min = 1, max = 3, message = "Invalid transactionType [Value should be between 1-3]")
+    @Range(min = 1, max = 3, message = "Invalid transactionType, value should be between [1-3]")
     private int transactionType;
-    @Range(min = 1, max = 3, message = "Invalid operation [Value should be between 1-2]")
+    @Range(min = 1, max = 3, message = "Invalid operation, value should be between [1-2]")
     private int operation;
     @Valid
     private OtherAccountDto otherAccount;
