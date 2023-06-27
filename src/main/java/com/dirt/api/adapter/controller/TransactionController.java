@@ -24,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionEntity> registerTransaction(@RequestBody @Valid TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionEntity> registerTransaction(@Valid @RequestBody  TransactionRequest transactionRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.register(transactionRequest));
     }
 }
