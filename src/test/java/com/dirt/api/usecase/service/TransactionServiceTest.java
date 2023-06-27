@@ -12,7 +12,6 @@ import com.dirt.api.domain.enums.OperationEnum;
 import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.domain.exception.AccountNotExistException;
-import com.dirt.api.usecase.factory.TransactionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -51,13 +50,11 @@ class TransactionServiceTest {
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
     private final AccountRepository accountRepository = mock(AccountRepository.class);
-    private final TransactionFactory transactionFactory = mock(TransactionFactory.class);
     private final TransactionService transactionService = new TransactionService(transactionRepository, accountRepository);
 
     @Test
     public void shouldRegisterTransaction() {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
-        when(transactionFactory.getTransaction(any(TransactionRequest.class), any(AccountEntity.class))).thenReturn(getTransactionEntity());
         when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
 
         TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, 1));
