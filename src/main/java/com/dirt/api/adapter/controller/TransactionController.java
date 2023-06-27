@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -22,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionEntity> registerTransaction(@RequestBody TransactionRequest transactionRequest) {
+    public ResponseEntity<TransactionEntity> registerTransaction(@RequestBody @Valid TransactionRequest transactionRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.register(transactionRequest));
     }
 }
