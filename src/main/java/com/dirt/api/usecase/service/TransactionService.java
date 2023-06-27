@@ -14,8 +14,8 @@ import java.util.Optional;
 @Service
 public class TransactionService {
 
-    final TransactionRepository transactionRepository;
-    final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
 
     public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
