@@ -1,13 +1,24 @@
 package com.dirt.api.adapter.dto.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class TransactionRequest {
+
+    @NotBlank(message = "Invalid ip")
     private String ip;
+    @NotNull(message = "Invalid amount")
     private Double amount;
+    @NotNull(message = "Invalid tax")
     private Double tax;
+    @NotNull(message = "Invalid account")
     private Long accountId;
+    @NotBlank(message = "Invalid description")
     private String description;
     private CaptureMethodDto captureMethodDto;
+    @NotNull(message = "Invalid transactionType")
     private int transactionType;
+    @NotNull(message = "Invalid operation")
     private int operation;
     private OtherAccountDto otherAccountDto;
 
