@@ -1,5 +1,8 @@
 package com.dirt.api.adapter.dto.request;
 
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -15,12 +18,14 @@ public class TransactionRequest {
     private Long accountId;
     @NotBlank(message = "Invalid description")
     private String description;
-    private CaptureMethodDto captureMethodDto;
-    @NotNull(message = "Invalid transactionType")
+    @Valid
+    private CaptureMethodDto captureMethod;
+    @Range(min = 1, max = 3, message = "Invalid transactionType [Value should be between 1-3]")
     private int transactionType;
-    @NotNull(message = "Invalid operation")
+    @Range(min = 1, max = 3, message = "Invalid operation [Value should be between 1-2]")
     private int operation;
-    private OtherAccountDto otherAccountDto;
+    @Valid
+    private OtherAccountDto otherAccount;
 
     public String getIp() {
         return ip;
@@ -62,14 +67,6 @@ public class TransactionRequest {
         this.description = description;
     }
 
-    public CaptureMethodDto getCaptureMethodRequest() {
-        return captureMethodDto;
-    }
-
-    public void setCaptureMethodRequest(CaptureMethodDto captureMethodDto) {
-        this.captureMethodDto = captureMethodDto;
-    }
-
     public int getTransactionType() {
         return transactionType;
     }
@@ -86,11 +83,19 @@ public class TransactionRequest {
         this.operation = operation;
     }
 
-    public OtherAccountDto getOtherAccountRequest() {
-        return otherAccountDto;
+    public CaptureMethodDto getCaptureMethod() {
+        return captureMethod;
     }
 
-    public void setOtherAccountRequest(OtherAccountDto otherAccountDto) {
-        this.otherAccountDto = otherAccountDto;
+    public void setCaptureMethod(CaptureMethodDto captureMethod) {
+        this.captureMethod = captureMethod;
+    }
+
+    public OtherAccountDto getOtherAccount() {
+        return otherAccount;
+    }
+
+    public void setOtherAccount(OtherAccountDto otherAccount) {
+        this.otherAccount = otherAccount;
     }
 }
