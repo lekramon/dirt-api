@@ -13,7 +13,7 @@ public class CaptureMethodEnumConverter implements AttributeConverter<CaptureMet
         if (captureMethodEnum == null) {
             return null;
         }
-        return captureMethodEnum.getCaptureMethodType();
+        return captureMethodEnum.getCaptureMethodTypeCode();
     }
 
     @Override

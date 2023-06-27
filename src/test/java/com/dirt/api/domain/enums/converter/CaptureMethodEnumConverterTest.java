@@ -13,7 +13,7 @@ class CaptureMethodEnumConverterTest {
     public void shouldConvertToDatabaseColumn() {
         CaptureMethodEnum captureMethodEnum = CaptureMethodEnum.WEB;
         Integer databaseColumn = captureMethodEnumConverter.convertToDatabaseColumn(captureMethodEnum);
-        Assertions.assertEquals(captureMethodEnum.getCaptureMethodType(), databaseColumn);
+        Assertions.assertEquals(captureMethodEnum.getCaptureMethodTypeCode(), databaseColumn);
     }
 
     @Test

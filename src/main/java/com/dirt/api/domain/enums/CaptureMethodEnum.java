@@ -6,22 +6,22 @@ public enum CaptureMethodEnum {
 
     WEB(1), APP(2), ATM(3);
 
-    private final int captureMethodType;
+    private final int captureMethodTypeCode;
 
-    CaptureMethodEnum(int captureMethodType) {
-        this.captureMethodType = captureMethodType;
+    CaptureMethodEnum(int captureMethodTypeCode) {
+        this.captureMethodTypeCode = captureMethodTypeCode;
     }
 
     public static CaptureMethodEnum fromCode(int captureMethod) {
         for (CaptureMethodEnum captureMethodEnum : CaptureMethodEnum.values()) {
-            if (captureMethodEnum.getCaptureMethodType() == captureMethod) {
+            if (captureMethodEnum.getCaptureMethodTypeCode() == captureMethod) {
                 return captureMethodEnum;
             }
         }
         throw new EnumNotExistException("The captureMethodType: " + captureMethod + " doesn't exist");
     }
 
-    public int getCaptureMethodType() {
-        return captureMethodType;
+    public int getCaptureMethodTypeCode() {
+        return captureMethodTypeCode;
     }
 }
