@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class TransactionFactory {
 
     public TransactionEntity getTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TransactionEntity transactionEntity = new TransactionEntity();
         CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethod();
         OtherAccountDto otherAccountDto = transactionRequest.getOtherAccount();
