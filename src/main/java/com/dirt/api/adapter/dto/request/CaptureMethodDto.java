@@ -1,16 +1,19 @@
 package com.dirt.api.adapter.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
+@Component
 public class CaptureMethodDto {
 
     @JsonProperty("id")
     @NotBlank(message = "Invalid captureMethodId")
     private String captureMethodId;
-    @NotNull(message = "Invalid type")
+
+    @Range(min = 1, max = 3, message = "Invalid captureMethodtype [Value should be between 1-3]")
     private int type;
 
     public String getCaptureMethodId() {

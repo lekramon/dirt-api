@@ -1,9 +1,11 @@
 package com.dirt.api.adapter.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
+@Component
 public class OtherAccountDto {
 
     @JsonProperty("number")
