@@ -111,10 +111,10 @@ class TransactionControllerTest {
         transactionRequest.setAmount(TRANSACTION_AMOUNT);
         transactionRequest.setTax(TRANSACTION_TAX);
         transactionRequest.setDescription(DES_PAGAMENTO);
-        transactionRequest.setCaptureMethodRequest(captureMethodDto);
+        transactionRequest.setCaptureMethod(captureMethodDto);
         transactionRequest.setTransactionType(1);
         transactionRequest.setOperation(1);
-        transactionRequest.setOtherAccountRequest(otherAccountDto);
+        transactionRequest.setOtherAccount(otherAccountDto);
         return transactionRequest;
     }
 

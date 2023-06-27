@@ -17,8 +17,8 @@ public class TransactionFactory {
     public TransactionEntity getTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TransactionEntity transactionEntity = new TransactionEntity();
-        CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethodRequest();
-        OtherAccountDto otherAccountDto = transactionRequest.getOtherAccountRequest();
+        CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethod();
+        OtherAccountDto otherAccountDto = transactionRequest.getOtherAccount();
         transactionEntity.setTransactionIp(transactionRequest.getIp());
         transactionEntity.setTransactionAmount(transactionRequest.getAmount());
         transactionEntity.setTransactionTax(transactionRequest.getTax());
