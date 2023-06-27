@@ -29,9 +29,9 @@ public class TransactionFactory {
         transactionEntity.setTransactionType(TransactionTypeEnum.fromCode(transactionRequest.getTransactionType()));
         transactionEntity.setOperation(OperationEnum.fromCode(transactionRequest.getOperation()));
         transactionEntity.setTransactionDat(timestamp);
-        transactionEntity.setTransactionOtherAccount(otherAccountDto.getNumber());
-        transactionEntity.setTransactionOtherAccountAgency(otherAccountDto.getAgency());
-        transactionEntity.setTransactionOtherAccountBank(otherAccountDto.getBankCode());
+        transactionEntity.setTransactionOtherAccount(otherAccountDto.getAccountNumber());
+        transactionEntity.setTransactionOtherAccountAgency(otherAccountDto.getAccountAgency());
+        transactionEntity.setTransactionOtherAccountBank(otherAccountDto.getAccountBankCode());
         transactionEntity.setStatus(StatusEnum.fromCode(1));
         return transactionEntity;
     }

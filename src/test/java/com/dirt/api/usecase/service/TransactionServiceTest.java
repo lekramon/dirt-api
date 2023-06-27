@@ -91,9 +91,9 @@ class TransactionServiceTest {
         captureMethodDto.setType(1);
 
         OtherAccountDto otherAccountDto = new OtherAccountDto();
-        otherAccountDto.setNumber("1234");
-        otherAccountDto.setAgency("1234");
-        otherAccountDto.setBankCode("1234");
+        otherAccountDto.setAccountNumber("1234");
+        otherAccountDto.setAccountAgency("1234");
+        otherAccountDto.setAccountBankCode("1234");
 
         TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAccountId(accountId);
