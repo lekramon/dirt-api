@@ -3,19 +3,23 @@ package com.dirt.api.adapter.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Component
 public class OtherAccountDto {
 
     @JsonProperty("number")
-    @NotNull(message = "Invalid accountNumber")
+    @NotBlank(message = "Invalid accountNumber, cannot be blank")
+    @Size(max = 20, message = "The accountNumber size must be have max 20 characters")
     private String accountNumber;
     @JsonProperty("agency")
-    @NotNull(message = "Invalid accountAgency")
+    @NotBlank(message = "Invalid accountAgency, cannot be blank")
+    @Size(max = 6, message = "The accountAgency size must be have max 6 characters")
     private String accountAgency;
     @JsonProperty("bankCode")
-    @NotNull(message = "Invalid accountBankCode")
+    @NotBlank(message = "Invalid accountBankCode, cannot be blank")
+    @Size(max = 4, message = "The accountBankCode size must be have max 4 characters")
     private String accountBankCode;
 
     public String getAccountNumber() {
