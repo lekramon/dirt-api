@@ -13,7 +13,7 @@ public class OperationEnumConverter implements AttributeConverter<OperationEnum,
         if (operationEnum == null) {
             return null;
         }
-        return operationEnum.getOperation();
+        return operationEnum.getOperationCode();
     }
 
     @Override

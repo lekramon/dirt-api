@@ -6,22 +6,22 @@ public enum OperationEnum {
 
     CREDIT(1), DEBIT(2);
 
-    private final int operation;
+    private final int operationCode;
 
-    OperationEnum(int operation) {
-        this.operation = operation;
+    OperationEnum(int operationCode) {
+        this.operationCode = operationCode;
     }
 
     public static OperationEnum fromCode(int operation) {
         for (OperationEnum operationEnum : OperationEnum.values()) {
-            if (operationEnum.getOperation() == operation) {
+            if (operationEnum.getOperationCode() == operation) {
                 return operationEnum;
             }
         }
         throw new EnumNotExistException("The operation: " + operation + " doesn't exist");
     }
 
-    public int getOperation() {
-        return operation;
+    public int getOperationCode() {
+        return operationCode;
     }
 }

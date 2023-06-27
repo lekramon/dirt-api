@@ -13,7 +13,7 @@ class OperationEnumConverterTest {
     public void shouldConvertToDatabaseColumn() {
         OperationEnum operationEnum = OperationEnum.DEBIT;
         Integer databaseColumn = operationEnumConverter.convertToDatabaseColumn(operationEnum);
-        Assertions.assertEquals(operationEnum.getOperation(), databaseColumn);
+        Assertions.assertEquals(operationEnum.getOperationCode(), databaseColumn);
     }
 
     @Test
