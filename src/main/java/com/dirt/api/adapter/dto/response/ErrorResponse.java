@@ -2,16 +2,16 @@ package com.dirt.api.adapter.dto.response;
 
 public class ErrorResponse {
 
-    private final int code;
+    private final int errorCode;
     private final String message;
 
-    public ErrorResponse(int code, String message) {
-        this.code = code;
+    public ErrorResponse(int errorCode, String message) {
+        this.errorCode = errorCode;
         this.message = message;
     }
 
-    public int getCode() {
-        return code;
+    public int getErrorCode() {
+        return errorCode;
     }
 
     public String getMessage() {
