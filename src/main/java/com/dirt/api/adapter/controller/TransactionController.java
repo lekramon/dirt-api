@@ -2,7 +2,8 @@ package com.dirt.api.adapter.controller;
 
 
 import com.dirt.api.adapter.dto.request.TransactionRequest;
-import com.dirt.api.domain.entity.TransactionEntity;
+import com.dirt.api.adapter.dto.response.TransactionResponse;
+import com.dirt.api.usecase.factory.TransactionResponseFactory;
 import com.dirt.api.usecase.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionEntity> registerTransaction(@Valid @RequestBody  TransactionRequest transactionRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.register(transactionRequest));
+    public ResponseEntity<TransactionResponse> registerTransaction(@Valid @RequestBody TransactionRequest transactionRequest) {
+        TransactionResponse transactionResponse = TransactionResponseFactory.createTransactionResponse(transactionService.register(transactionRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 }
