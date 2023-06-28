@@ -24,8 +24,7 @@ public class TransactionService {
 
     public TransactionEntity register(TransactionRequest transactionRequest) {
         AccountEntity accountEntity = getAccountEntityById(transactionRequest.getAccountId());
-        TransactionFactory transactionFactory = new TransactionFactory();
-        return transactionRepository.save(transactionFactory.getTransaction(transactionRequest, accountEntity));
+        return transactionRepository.save(TransactionFactory.createTransaction(transactionRequest, accountEntity));
     }
 
     private AccountEntity getAccountEntityById(long id) {

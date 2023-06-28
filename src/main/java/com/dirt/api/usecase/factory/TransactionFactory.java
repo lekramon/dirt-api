@@ -1,7 +1,7 @@
 package com.dirt.api.usecase.factory;
 
-import com.dirt.api.adapter.dto.request.CaptureMethodDto;
-import com.dirt.api.adapter.dto.request.OtherAccountDto;
+import com.dirt.api.adapter.dto.CaptureMethodDto;
+import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
 import com.dirt.api.domain.entity.AccountEntity;
 import com.dirt.api.domain.entity.TransactionEntity;
@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 
 public class TransactionFactory {
 
-    public TransactionEntity getTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
+    public static TransactionEntity createTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         TransactionEntity transactionEntity = new TransactionEntity();
         CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethod();
@@ -25,9 +25,9 @@ public class TransactionFactory {
         transactionEntity.setTransactionAccount(accountEntity);
         transactionEntity.setTransactionDes(transactionRequest.getDescription());
         transactionEntity.setTransactionCaptureMethod(captureMethodDto.getCaptureMethodId());
-        transactionEntity.setCaptureMethod(CaptureMethodEnum.fromCode(captureMethodDto.getType()));
-        transactionEntity.setTransactionType(TransactionTypeEnum.fromCode(transactionRequest.getTransactionType()));
-        transactionEntity.setOperation(OperationEnum.fromCode(transactionRequest.getOperation()));
+        transactionEntity.setCaptureMethod(CaptureMethodEnum.fromValue(captureMethodDto.getType()));
+        transactionEntity.setTransactionType(TransactionTypeEnum.fromValue(transactionRequest.getTransactionType()));
+        transactionEntity.setOperation(OperationEnum.fromValue(transactionRequest.getOperation()));
         transactionEntity.setTransactionDat(timestamp);
         transactionEntity.setTransactionOtherAccount(otherAccountDto.getAccountNumber());
         transactionEntity.setTransactionOtherAccountAgency(otherAccountDto.getAccountAgency());
