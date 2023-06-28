@@ -21,6 +21,15 @@ public enum CaptureMethodEnum {
         throw new EnumNotExistException("The captureMethodType: " + captureMethod + " doesn't exist");
     }
 
+    public static CaptureMethodEnum fromValue(String captureMethod) {
+        for (CaptureMethodEnum captureMethodEnum : CaptureMethodEnum.values()) {
+            if (captureMethodEnum.name().equalsIgnoreCase(captureMethod)) {
+                return captureMethodEnum;
+            }
+        }
+        throw new EnumNotExistException("The captureMethodType: " + captureMethod + " doesn't exist");
+    }
+
     public int getCaptureMethodTypeCode() {
         return captureMethodTypeCode;
     }

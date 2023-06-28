@@ -21,6 +21,15 @@ public enum TransactionTypeEnum {
         throw new EnumNotExistException("The transactionType: " + transactionTypeCod + " doesn't exist");
     }
 
+    public static TransactionTypeEnum fromValue(String transactionType) {
+        for (TransactionTypeEnum transactionTypeEnum : TransactionTypeEnum.values()) {
+            if (transactionTypeEnum.name().equalsIgnoreCase(transactionType)) {
+                return transactionTypeEnum;
+            }
+        }
+        throw new EnumNotExistException("The transactionType: " + transactionType + " doesn't exist");
+    }
+
     public int getTransactionTypeCod() {
         return transactionTypeCod;
     }

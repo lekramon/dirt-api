@@ -21,6 +21,15 @@ public enum OperationEnum {
         throw new EnumNotExistException("The operation: " + operation + " doesn't exist");
     }
 
+    public static OperationEnum fromValue(String operation) {
+        for (OperationEnum operationEnum : OperationEnum.values()) {
+            if (operationEnum.name().equalsIgnoreCase(operation)) {
+                return operationEnum;
+            }
+        }
+        throw new EnumNotExistException("The operation: " + operation + " doesn't exist");
+    }
+
     public int getOperationCode() {
         return operationCode;
     }
