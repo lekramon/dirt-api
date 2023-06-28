@@ -1,7 +1,7 @@
 package com.dirt.api.usecase.service;
 
-import com.dirt.api.adapter.dto.request.CaptureMethodDto;
-import com.dirt.api.adapter.dto.request.OtherAccountDto;
+import com.dirt.api.adapter.dto.CaptureMethodDto;
+import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
 import com.dirt.api.adapter.repository.AccountRepository;
 import com.dirt.api.adapter.repository.TransactionRepository;
@@ -57,7 +57,7 @@ class TransactionServiceTest {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
         when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
 
-        TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, 1));
+        TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
         TransactionEntity expectedTransactionEntity = getTransactionEntity();
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
@@ -69,7 +69,7 @@ class TransactionServiceTest {
         when(accountRepository.findById(NOT_ACCOUNT_ID)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(AccountNotExistException.class, () -> {
-            transactionService.register(getTransactionRequest(NOT_ACCOUNT_ID, 1));
+            transactionService.register(getTransactionRequest(NOT_ACCOUNT_ID, "DEBIT"));
         });
     }
 
@@ -85,10 +85,10 @@ class TransactionServiceTest {
         return accountEntity;
     }
 
-    private TransactionRequest getTransactionRequest(long accountId, int operation) {
+    private TransactionRequest getTransactionRequest(long accountId, String operation) {
         CaptureMethodDto captureMethodDto = new CaptureMethodDto();
         captureMethodDto.setCaptureMethodId(TRANSACTION_CAPTURE_METHOD);
-        captureMethodDto.setType(1);
+        captureMethodDto.setType("WEB");
 
         OtherAccountDto otherAccountDto = new OtherAccountDto();
         otherAccountDto.setAccountNumber("1234");
@@ -102,7 +102,7 @@ class TransactionServiceTest {
         transactionRequest.setTax(TRANSACTION_TAX);
         transactionRequest.setDescription(DES_PAGAMENTO);
         transactionRequest.setCaptureMethod(captureMethodDto);
-        transactionRequest.setTransactionType(1);
+        transactionRequest.setTransactionType("PIX");
         transactionRequest.setOperation(operation);
         transactionRequest.setOtherAccount(otherAccountDto);
         return transactionRequest;
