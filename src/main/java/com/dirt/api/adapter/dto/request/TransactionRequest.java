@@ -1,6 +1,7 @@
 package com.dirt.api.adapter.dto.request;
 
-import org.hibernate.validator.constraints.Range;
+import com.dirt.api.adapter.dto.CaptureMethodDto;
+import com.dirt.api.adapter.dto.OtherAccountDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -23,10 +24,10 @@ public class TransactionRequest {
     private String description;
     @Valid
     private CaptureMethodDto captureMethod;
-    @Range(min = 1, max = 3, message = "Invalid transactionType, value should be between [1-3]")
-    private int transactionType;
-    @Range(min = 1, max = 3, message = "Invalid operation, value should be between [1-2]")
-    private int operation;
+    @NotBlank(message = "Invalid transactionType, cannot be blank")
+    private String transactionType;
+    @NotBlank(message = "Invalid operation, cannot be blank")
+    private String operation;
     @Valid
     private OtherAccountDto otherAccount;
 
@@ -70,19 +71,19 @@ public class TransactionRequest {
         this.description = description;
     }
 
-    public int getTransactionType() {
+    public String getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(int transactionType) {
+    public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
-    public int getOperation() {
+    public String getOperation() {
         return operation;
     }
 
-    public void setOperation(int operation) {
+    public void setOperation(String operation) {
         this.operation = operation;
     }
 
