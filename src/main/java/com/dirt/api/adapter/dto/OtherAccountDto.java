@@ -1,4 +1,4 @@
-package com.dirt.api.adapter.dto.request;
+package com.dirt.api.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
