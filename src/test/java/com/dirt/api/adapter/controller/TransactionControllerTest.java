@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -36,8 +37,8 @@ class TransactionControllerTest {
 
     private static final String DES_PAGAMENTO = "Payment Ze Manga";
     private static final String TRANSACTION_IP = "192.168.0.1";
-    private static final Double TRANSACTION_AMOUNT = 100.0;
-    private static final Double TRANSACTION_TAX = 3.0;
+    private static final BigDecimal TRANSACTION_AMOUNT = BigDecimal.valueOf(100.0);
+    private static final BigDecimal TRANSACTION_TAX = BigDecimal.valueOf(3.0);
     private static final String TRANSACTION_CAPTURE_METHOD = "123456";
     private static final CaptureMethodEnum CAPTURE_METHOD = CaptureMethodEnum.APP;
     private static final TransactionTypeEnum TRANSACTION_TYPE = TransactionTypeEnum.PIX;
