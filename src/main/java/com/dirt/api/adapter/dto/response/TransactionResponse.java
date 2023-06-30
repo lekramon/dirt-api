@@ -6,14 +6,15 @@ import com.dirt.api.adapter.dto.OtherAccountDto;
 public class TransactionResponse {
 
     private Long transactionId;
+    private String status;
     private String transactionIp;
     private Double transactionAmount;
     private Double transactionTax;
-    private AccountResponse account;
     private String description;
     private String transactionType;
-    private String operation;
+    private AccountResponse account;
     private CaptureMethodDto captureMethod;
+    private String operation;
     private OtherAccountDto otherAccount;
 
     public Long getTransactionId() {
@@ -94,5 +95,13 @@ public class TransactionResponse {
 
     public void setOtherAccount(OtherAccountDto otherAccount) {
         this.otherAccount = otherAccount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -8,8 +8,9 @@ import com.dirt.api.domain.entity.TransactionEntity;
 
 public class TransactionResponseFactory {
     public static TransactionResponse createTransactionResponse(TransactionEntity transactionEntity) {
-        TransactionResponse transactionResponse = new TransactionResponse();
+        final TransactionResponse transactionResponse = new TransactionResponse();
         transactionResponse.setTransactionId(transactionEntity.getTransactionId());
+        transactionResponse.setStatus(transactionEntity.getStatus().name());
         transactionResponse.setTransactionIp(transactionEntity.getTransactionIp());
         transactionResponse.setTransactionAmount(transactionEntity.getTransactionAmount());
         transactionResponse.setTransactionTax(transactionEntity.getTransactionTax());
@@ -17,7 +18,7 @@ public class TransactionResponseFactory {
         transactionResponse.setTransactionType(transactionEntity.getTransactionType().name());
         transactionResponse.setOperation(transactionEntity.getOperation().name());
 
-        AccountResponse accountResponse = new AccountResponse();
+        final AccountResponse accountResponse = new AccountResponse();
         accountResponse.setAccountId(transactionEntity.getTransactionAccount().getAccountId());
         accountResponse.setAccountName(transactionEntity.getTransactionAccount().getAccountName());
         accountResponse.setDocument(transactionEntity.getTransactionAccount().getDocument());
@@ -27,12 +28,12 @@ public class TransactionResponseFactory {
         accountResponse.setAccountType(transactionEntity.getTransactionAccount().getAccountType());
         transactionResponse.setAccount(accountResponse);
 
-        CaptureMethodDto captureMethodDto = new CaptureMethodDto();
+        final CaptureMethodDto captureMethodDto = new CaptureMethodDto();
         captureMethodDto.setCaptureMethodId(transactionEntity.getTransactionCaptureMethod());
         captureMethodDto.setType(transactionEntity.getCaptureMethod().name());
         transactionResponse.setCaptureMethod(captureMethodDto);
 
-        OtherAccountDto otherAccountDto = new OtherAccountDto();
+        final OtherAccountDto otherAccountDto = new OtherAccountDto();
         otherAccountDto.setAccountNumber(transactionEntity.getTransactionOtherAccount());
         otherAccountDto.setAccountAgency(transactionEntity.getTransactionOtherAccountAgency());
         otherAccountDto.setAccountBankCode(transactionEntity.getTransactionOtherAccountBank());
