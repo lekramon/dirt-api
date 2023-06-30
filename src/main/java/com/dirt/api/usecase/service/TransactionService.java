@@ -9,8 +9,6 @@ import com.dirt.api.domain.exception.AccountNotExistException;
 import com.dirt.api.usecase.factory.TransactionFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class TransactionService {
 
@@ -23,15 +21,12 @@ public class TransactionService {
     }
 
     public TransactionEntity register(TransactionRequest transactionRequest) {
-        AccountEntity accountEntity = getAccountEntityById(transactionRequest.getAccountId());
+        final AccountEntity accountEntity = getAccountEntityById(transactionRequest.getAccountId());
         return transactionRepository.save(TransactionFactory.createTransaction(transactionRequest, accountEntity));
     }
 
     private AccountEntity getAccountEntityById(long id) {
-        final Optional<AccountEntity> accountEntity = accountRepository.findById(id);
-        if (accountEntity.isEmpty()) {
-            throw new AccountNotExistException("This account id: " + id + " doesn't exist");
-        }
-        return accountEntity.get();
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotExistException("This account id: " + id + " doesn't exist"));
     }
 }

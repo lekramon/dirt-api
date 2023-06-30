@@ -16,9 +16,10 @@ public class TransactionFactory {
 
     public static TransactionEntity createTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        TransactionEntity transactionEntity = new TransactionEntity();
-        CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethod();
-        OtherAccountDto otherAccountDto = transactionRequest.getOtherAccount();
+        final TransactionEntity transactionEntity = new TransactionEntity();
+        final CaptureMethodDto captureMethodDto = transactionRequest.getCaptureMethod();
+        final OtherAccountDto otherAccountDto = transactionRequest.getOtherAccount();
+
         transactionEntity.setTransactionIp(transactionRequest.getIp());
         transactionEntity.setTransactionAmount(transactionRequest.getAmount());
         transactionEntity.setTransactionTax(transactionRequest.getTax());
@@ -32,7 +33,8 @@ public class TransactionFactory {
         transactionEntity.setTransactionOtherAccount(otherAccountDto.getAccountNumber());
         transactionEntity.setTransactionOtherAccountAgency(otherAccountDto.getAccountAgency());
         transactionEntity.setTransactionOtherAccountBank(otherAccountDto.getAccountBankCode());
-        transactionEntity.setStatus(StatusEnum.fromCode(1));
+        transactionEntity.setStatus(StatusEnum.fromValue("PENDING"));
+
         return transactionEntity;
     }
 }
