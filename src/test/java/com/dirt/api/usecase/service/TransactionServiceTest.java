@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 class TransactionServiceTest {
 
     private static final Long ACCOUNT_ID = 1L;
-
     private static final Long NOT_ACCOUNT_ID = 999L;
     private static final String ACCOUNT_NAME = "Han Solo";
     private static final String ACCOUNT_DOCUMENT = "59805714004";
@@ -35,7 +34,6 @@ class TransactionServiceTest {
     private static final String ACCOUNT_NUM_AGENCY = "0001";
     private static final String ACCOUNT_NUM_BANK = "290";
     private static final char ACCOUNT_TYPE = 'F';
-
     private static final String DES_PAGAMENTO = "Payment Ze Manga";
     private static final String TRANSACTION_IP = "192.168.0.1";
     private static final Double TRANSACTION_AMOUNT = 100.0;
@@ -57,8 +55,8 @@ class TransactionServiceTest {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
         when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
 
-        TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
-        TransactionEntity expectedTransactionEntity = getTransactionEntity();
+        final TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
+        final TransactionEntity expectedTransactionEntity = getTransactionEntity();
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
 
@@ -74,7 +72,7 @@ class TransactionServiceTest {
     }
 
     private AccountEntity getAccountEntity() {
-        AccountEntity accountEntity = new AccountEntity();
+        final AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccountId(ACCOUNT_ID);
         accountEntity.setAccountName(ACCOUNT_NAME);
         accountEntity.setDocument(ACCOUNT_DOCUMENT);
@@ -86,16 +84,16 @@ class TransactionServiceTest {
     }
 
     private TransactionRequest getTransactionRequest(long accountId, String operation) {
-        CaptureMethodDto captureMethodDto = new CaptureMethodDto();
+        final CaptureMethodDto captureMethodDto = new CaptureMethodDto();
         captureMethodDto.setCaptureMethodId(TRANSACTION_CAPTURE_METHOD);
         captureMethodDto.setType("WEB");
 
-        OtherAccountDto otherAccountDto = new OtherAccountDto();
+        final OtherAccountDto otherAccountDto = new OtherAccountDto();
         otherAccountDto.setAccountNumber("1234");
         otherAccountDto.setAccountAgency("1234");
         otherAccountDto.setAccountBankCode("1234");
 
-        TransactionRequest transactionRequest = new TransactionRequest();
+        final TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAccountId(accountId);
         transactionRequest.setIp(TRANSACTION_IP);
         transactionRequest.setAmount(TRANSACTION_AMOUNT);
@@ -109,7 +107,7 @@ class TransactionServiceTest {
     }
 
     private TransactionEntity getTransactionEntity() {
-        TransactionEntity transactionEntity = new TransactionEntity();
+        final TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setTransactionAccount(getAccountEntity());
         transactionEntity.setTransactionIp(TRANSACTION_IP);
         transactionEntity.setTransactionAmount(TRANSACTION_AMOUNT);

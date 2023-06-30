@@ -1,8 +1,10 @@
 package com.dirt.api.adapter.controller;
 
-import com.dirt.api.adapter.dto.request.CaptureMethodDto;
-import com.dirt.api.adapter.dto.request.OtherAccountDto;
+import com.dirt.api.adapter.dto.CaptureMethodDto;
+import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.response.AccountResponse;
+import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.domain.entity.AccountEntity;
 import com.dirt.api.domain.entity.TransactionEntity;
 import com.dirt.api.domain.enums.CaptureMethodEnum;
@@ -52,20 +54,19 @@ class TransactionControllerTest {
     public void shouldRegisterTransaction() {
         when(transactionService.register(any(TransactionRequest.class))).thenReturn(getTransactionEntity());
 
-        ResponseEntity<TransactionEntity> actualTransactionResponseEntity = transactionController.registerTransaction(getTransactionRequest());
-        ResponseEntity<TransactionEntity> expectedTransactionResponseEntity = getResponseEntityTransaction();
+        final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse());
 
-        Assertions.assertEquals(expectedTransactionResponseEntity.getStatusCode(), actualTransactionResponseEntity.getStatusCode());
-        assertThat(actualTransactionResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponseEntity.getBody());
+        Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
+        assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
     }
 
-    private ResponseEntity<TransactionEntity> getResponseEntityTransaction() {
-        TransactionEntity transactionEntity = getTransactionEntity();
-        return ResponseEntity.status(HttpStatus.CREATED).body(transactionEntity);
+    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransaction(TransactionResponse transactionResponse) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 
     private AccountEntity getAccountEntity() {
-        AccountEntity accountEntity = new AccountEntity();
+        final AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccountId(ACCOUNT_ID);
         accountEntity.setAccountName(ACCOUNT_NAME);
         accountEntity.setDocument(ACCOUNT_DOCUMENT);
@@ -77,7 +78,8 @@ class TransactionControllerTest {
     }
 
     private TransactionEntity getTransactionEntity() {
-        TransactionEntity transactionEntity = new TransactionEntity();
+        final TransactionEntity transactionEntity = new TransactionEntity();
+        transactionEntity.setTransactionId(1L);
         transactionEntity.setTransactionAccount(getAccountEntity());
         transactionEntity.setTransactionIp(TRANSACTION_IP);
         transactionEntity.setTransactionAmount(TRANSACTION_AMOUNT);
@@ -96,27 +98,57 @@ class TransactionControllerTest {
     }
 
     private TransactionRequest getTransactionRequest() {
-        CaptureMethodDto captureMethodDto = new CaptureMethodDto();
-        captureMethodDto.setCaptureMethodId("1234");
-        captureMethodDto.setType(1);
+        final CaptureMethodDto captureMethodDto = new CaptureMethodDto();
+        captureMethodDto.setCaptureMethodId(TRANSACTION_CAPTURE_METHOD);
+        captureMethodDto.setType("APP");
 
-        OtherAccountDto otherAccountDto = new OtherAccountDto();
-        otherAccountDto.setAccountNumber("1234");
-        otherAccountDto.setAccountAgency("1234");
-        otherAccountDto.setAccountBankCode("1234");
+        final OtherAccountDto otherAccountDto = new OtherAccountDto();
+        otherAccountDto.setAccountNumber(TRANSACTION_OTHER_ACCOUNT);
+        otherAccountDto.setAccountAgency(TRANSACTION_OTHER_ACCOUNT_AGENCY);
+        otherAccountDto.setAccountBankCode(TRANSACTION_OTHER_ACCOUNT_BANK);
 
-        TransactionRequest transactionRequest = new TransactionRequest();
+        final TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAccountId(ACCOUNT_ID);
         transactionRequest.setIp(TRANSACTION_IP);
         transactionRequest.setAmount(TRANSACTION_AMOUNT);
         transactionRequest.setTax(TRANSACTION_TAX);
         transactionRequest.setDescription(DES_PAGAMENTO);
         transactionRequest.setCaptureMethod(captureMethodDto);
-        transactionRequest.setTransactionType(1);
-        transactionRequest.setOperation(1);
+        transactionRequest.setTransactionType("PIX");
+        transactionRequest.setOperation("DEBIT");
         transactionRequest.setOtherAccount(otherAccountDto);
         return transactionRequest;
     }
 
+    private TransactionResponse getTransactionResponse() {
+        final TransactionResponse transactionResponse = new TransactionResponse();
+        transactionResponse.setTransactionId(1L);
+        transactionResponse.setStatus("PENDING");
+        transactionResponse.setTransactionIp(getTransactionRequest().getIp());
+        transactionResponse.setTransactionAmount(getTransactionRequest().getAmount());
+        transactionResponse.setTransactionTax(getTransactionRequest().getTax());
+        transactionResponse.setDescription(getTransactionRequest().getDescription());
+        transactionResponse.setTransactionType(getTransactionRequest().getTransactionType());
+        transactionResponse.setOperation(getTransactionRequest().getOperation());
+        transactionResponse.setAccount(getAccountResponse());
+        transactionResponse.setCaptureMethod(getTransactionRequest().getCaptureMethod());
+        transactionResponse.setOtherAccount(getTransactionRequest().getOtherAccount());
+
+        return transactionResponse;
+    }
+
+    private AccountResponse getAccountResponse() {
+        final AccountResponse accountResponse = new AccountResponse();
+
+        accountResponse.setAccountId(ACCOUNT_ID);
+        accountResponse.setDocument(ACCOUNT_DOCUMENT);
+        accountResponse.setAccountName(ACCOUNT_NAME);
+        accountResponse.setAccountNum(ACCOUNT_NUM);
+        accountResponse.setAccountNumAgency(ACCOUNT_NUM_AGENCY);
+        accountResponse.setAccountNumBank(ACCOUNT_NUM_BANK);
+        accountResponse.setAccountType(ACCOUNT_TYPE);
+
+        return accountResponse;
+    }
 
 }
