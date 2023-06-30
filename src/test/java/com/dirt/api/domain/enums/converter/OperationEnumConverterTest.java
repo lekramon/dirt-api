@@ -9,37 +9,51 @@ class OperationEnumConverterTest {
 
     private final OperationEnumConverter operationEnumConverter = new OperationEnumConverter();
 
+    private static final String INVALID_OPERATION = "DREBIT";
+    private static final String EXCEPTION_MESSAGE = "The operation: " + INVALID_OPERATION + " doesn't exist";
+
     @Test
     public void shouldConvertToDatabaseColumn() {
-        OperationEnum operationEnum = OperationEnum.DEBIT;
-        Integer databaseColumn = operationEnumConverter.convertToDatabaseColumn(operationEnum);
+        final OperationEnum operationEnum = OperationEnum.DEBIT;
+        final Integer databaseColumn = operationEnumConverter.convertToDatabaseColumn(operationEnum);
         Assertions.assertEquals(operationEnum.getOperationCode(), databaseColumn);
     }
 
     @Test
     public void shouldReturnNullToDatabaseColumn() {
-        Integer nullDatabaseColumn = operationEnumConverter.convertToDatabaseColumn(null);
+        final Integer nullDatabaseColumn = operationEnumConverter.convertToDatabaseColumn(null);
         Assertions.assertNull(nullDatabaseColumn);
     }
 
     @Test
     public void shouldConvertToEntityAttribute() {
-        int operationEnumValue = 1;
-        OperationEnum operationEnum = operationEnumConverter.convertToEntityAttribute(operationEnumValue);
+        final int operationEnumValue = 1;
+        final OperationEnum operationEnum = operationEnumConverter.convertToEntityAttribute(operationEnumValue);
         Assertions.assertEquals(OperationEnum.fromCode(operationEnumValue), operationEnum);
     }
 
     @Test
+    public void shouldNotConvertToEntityAttributeFromCode() {
+        final int operationValue = 4;
+        Assertions.assertThrows(EnumNotExistException.class, () -> {
+            operationEnumConverter.convertToEntityAttribute(operationValue);
+        });
+    }
+
+    @Test
     public void shouldReturnNullToEntityAttribute() {
-        OperationEnum operationEnum = operationEnumConverter.convertToEntityAttribute(null);
+        final OperationEnum operationEnum = operationEnumConverter.convertToEntityAttribute(null);
         Assertions.assertNull(operationEnum);
     }
 
     @Test
-    public void shouldThrowEnumNotExistExceptionToOperation() {
-        int operationValue = 6;
-        Assertions.assertThrows(EnumNotExistException.class, () -> {
-            OperationEnum operationEnum = operationEnumConverter.convertToEntityAttribute(operationValue);
+    public void shouldThrowEnumNotExistExceptionToOperationFromValue() {
+        final EnumNotExistException exception = Assertions.assertThrows(EnumNotExistException.class, () -> {
+            OperationEnum.fromValue(INVALID_OPERATION);
         });
+
+        final String actualMessage = exception.getMessage();
+
+        Assertions.assertEquals(EXCEPTION_MESSAGE, actualMessage);
     }
 }

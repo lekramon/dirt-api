@@ -9,37 +9,51 @@ class StatusEnumConverterTest {
 
     private final StatusEnumConverter statusEnumConverter = new StatusEnumConverter();
 
+    private static final String INVALID_STATUS = "PROCESSING";
+    private static final String EXCEPTION_MESSAGE = "The status: " + INVALID_STATUS + " doesn't exist";
+
     @Test
     public void shouldConvertToDatabaseColumn() {
-        StatusEnum statusEnum = StatusEnum.SUCCESS;
-        Integer databaseColumn = statusEnumConverter.convertToDatabaseColumn(statusEnum);
+        final StatusEnum statusEnum = StatusEnum.SUCCESS;
+        final Integer databaseColumn = statusEnumConverter.convertToDatabaseColumn(statusEnum);
         Assertions.assertEquals(statusEnum.getCodStatus(), databaseColumn);
     }
 
     @Test
     public void shouldReturnNullToDatabaseColumn() {
-        Integer nullDatabaseColumn = statusEnumConverter.convertToDatabaseColumn(null);
+        final Integer nullDatabaseColumn = statusEnumConverter.convertToDatabaseColumn(null);
         Assertions.assertNull(nullDatabaseColumn);
     }
 
     @Test
     public void shouldConvertToEntityAttribute() {
-        int statusEnumValue = 1;
-        StatusEnum statusEnum = statusEnumConverter.convertToEntityAttribute(statusEnumValue);
+        final int statusEnumValue = 1;
+        final StatusEnum statusEnum = statusEnumConverter.convertToEntityAttribute(statusEnumValue);
         Assertions.assertEquals(StatusEnum.fromCode(statusEnumValue), statusEnum);
     }
 
     @Test
+    public void shouldNotConvertToEntityAttributeFromCode() {
+        final int statusValue = 4;
+        Assertions.assertThrows(EnumNotExistException.class, () -> {
+            statusEnumConverter.convertToEntityAttribute(statusValue);
+        });
+    }
+
+    @Test
     public void shouldReturnNullToEntityAttribute() {
-        StatusEnum statusEnum = statusEnumConverter.convertToEntityAttribute(null);
+        final StatusEnum statusEnum = statusEnumConverter.convertToEntityAttribute(null);
         Assertions.assertNull(statusEnum);
     }
 
     @Test
-    public void shouldThrowEnumNotExistExceptionToStatus() {
-        int statusValue = 6;
-        Assertions.assertThrows(EnumNotExistException.class, () -> {
-            StatusEnum statusEnum = statusEnumConverter.convertToEntityAttribute(statusValue);
+    public void shouldThrowEnumNotExistExceptionToStatusFromValue() {
+        final EnumNotExistException exception = Assertions.assertThrows(EnumNotExistException.class, () -> {
+            StatusEnum.fromValue(INVALID_STATUS);
         });
+
+        final String actualMessage = exception.getMessage();
+
+        Assertions.assertEquals(EXCEPTION_MESSAGE, actualMessage);
     }
 }
