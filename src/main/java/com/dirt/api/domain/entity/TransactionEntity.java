@@ -6,6 +6,7 @@ import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
@@ -21,10 +22,10 @@ public class TransactionEntity {
     private String transactionIp;
 
     @Column(name = "NUM_AMOUNT")
-    private double transactionAmount;
+    private BigDecimal transactionAmount;
 
     @Column(name = "NUM_TAX")
-    private double transactionTax;
+    private BigDecimal transactionTax;
 
     @ManyToOne
     @JoinColumn(name = "IDT_ACCOUNT")
@@ -36,21 +37,17 @@ public class TransactionEntity {
     @Column(name = "IDT_CAPTURE_METHOD")
     private String transactionCaptureMethod;
 
-
     @Column(name = "COD_CAPTURE_METHOD_TYPE")
     private CaptureMethodEnum captureMethod;
 
-
     @Column(name = "COD_TRANSACTION_TYPE")
     private TransactionTypeEnum transactionType;
-
 
     @Column(name = "COD_OPERATION")
     private OperationEnum operation;
 
     @Column(name = "DAT_TRANSACTION")
     private Timestamp transactionDat;
-
 
     @Column(name = "COD_STATUS")
     private StatusEnum status;
@@ -80,19 +77,19 @@ public class TransactionEntity {
         this.transactionIp = transactionIp;
     }
 
-    public double getTransactionAmount() {
+    public BigDecimal getTransactionAmount() {
         return transactionAmount;
     }
 
-    public void setTransactionAmount(double transactionAmount) {
+    public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
-    public double getTransactionTax() {
+    public BigDecimal getTransactionTax() {
         return transactionTax;
     }
 
-    public void setTransactionTax(double transactionTax) {
+    public void setTransactionTax(BigDecimal transactionTax) {
         this.transactionTax = transactionTax;
     }
 

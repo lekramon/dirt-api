@@ -3,13 +3,15 @@ package com.dirt.api.adapter.dto.response;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 
+import java.math.BigDecimal;
+
 public class TransactionResponse {
 
     private Long transactionId;
     private String status;
     private String transactionIp;
-    private Double transactionAmount;
-    private Double transactionTax;
+    private BigDecimal transactionAmount;
+    private BigDecimal transactionTax;
     private String description;
     private String transactionType;
     private AccountResponse account;
@@ -33,19 +35,19 @@ public class TransactionResponse {
         this.transactionIp = transactionIp;
     }
 
-    public Double getTransactionAmount() {
+    public BigDecimal getTransactionAmount() {
         return transactionAmount;
     }
 
-    public void setTransactionAmount(Double transactionAmount) {
+    public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
-    public Double getTransactionTax() {
+    public BigDecimal getTransactionTax() {
         return transactionTax;
     }
 
-    public void setTransactionTax(Double transactionTax) {
+    public void setTransactionTax(BigDecimal transactionTax) {
         this.transactionTax = transactionTax;
     }
 
