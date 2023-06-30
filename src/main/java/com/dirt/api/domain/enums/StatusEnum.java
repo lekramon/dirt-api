@@ -21,6 +21,15 @@ public enum StatusEnum {
         throw new EnumNotExistException("The status: " + codStatus + " doesn't exist");
     }
 
+    public static StatusEnum fromValue(String status) {
+        for (StatusEnum statusEnum : StatusEnum.values()) {
+            if (statusEnum.name().equalsIgnoreCase(status)) {
+                return statusEnum;
+            }
+        }
+        throw new EnumNotExistException("The status: " + status + " doesn't exist");
+    }
+
     public int getCodStatus() {
         return codStatus;
     }
