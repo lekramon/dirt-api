@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RequestMapping("/transaction")
 public class TransactionController {
 
-    final TransactionService transactionService;
+    private final TransactionService transactionService;
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
