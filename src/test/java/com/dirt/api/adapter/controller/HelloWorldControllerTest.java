@@ -12,7 +12,7 @@ class HelloWorldControllerTest {
 
     @Test
     void shouldReturnHelloWorldAndStatusOk() {
-        ResponseEntity<String> actualResponse = helloWorldController.helloWorld();
+        final ResponseEntity<String> actualResponse = helloWorldController.helloWorld();
 
         assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertEquals("Hello World! Sippar caminhões", actualResponse.getBody());
