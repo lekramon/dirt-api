@@ -108,6 +108,7 @@ components:
               example: '290'
       xml:
         name: TransactionRequest
+
     TransactionResponse:
       type: object
       properties:
@@ -182,6 +183,7 @@ components:
               example: '290'
       xml:
         name: TransactionResponse
+
     ErrorResponse:
       type: object
       properties:
