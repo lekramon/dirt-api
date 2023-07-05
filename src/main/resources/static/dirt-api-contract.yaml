@@ -9,7 +9,7 @@ info:
   version: 1.0.11
 
 servers:
-  - url: https://localhost:15050/
+  - url: http://localhost:15050/
     description: DIRT API LOCAL
 
 tags:
@@ -103,7 +103,7 @@ components:
             agency:
               type: string
               example: '0001'
-            bankcode:
+            bankCode:
               type: string
               example: '290'
       xml:
