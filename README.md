@@ -127,6 +127,7 @@ this endpoint, follow these tips:
 - Response:
   ```json
   {
+  "transactionId": 1,
   "transactionIp": "192.158.1.38",
   "status": "PENDING",
   "transactionAmount": 99.99,

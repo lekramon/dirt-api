@@ -112,6 +112,10 @@ components:
     TransactionResponse:
       type: object
       properties:
+        transactionId:
+          type: integer
+          format: int32
+          example: 1
         transactionIp:
           type: string
           example: '192.158.1.38'
