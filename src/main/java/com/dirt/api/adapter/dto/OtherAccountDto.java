@@ -11,15 +11,15 @@ public class OtherAccountDto {
 
     @JsonProperty("number")
     @NotBlank(message = "Invalid accountNumber, cannot be blank")
-    @Size(max = 20, message = "The accountNumber size must be have max 20 characters")
+    @Size(max = 20, message = "The accountNumber size must have max 20 characters")
     private String accountNumber;
     @JsonProperty("agency")
     @NotBlank(message = "Invalid accountAgency, cannot be blank")
-    @Size(max = 6, message = "The accountAgency size must be have max 6 characters")
+    @Size(max = 6, message = "The accountAgency size must have max 6 characters")
     private String accountAgency;
     @JsonProperty("bankCode")
     @NotBlank(message = "Invalid accountBankCode, cannot be blank")
-    @Size(max = 4, message = "The accountBankCode size must be have max 4 characters")
+    @Size(max = 4, message = "The accountBankCode size must have max 4 characters")
     private String accountBankCode;
 
     public String getAccountNumber() {

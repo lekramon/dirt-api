@@ -12,7 +12,7 @@ public class CaptureMethodDto {
 
     @JsonProperty("id")
     @NotBlank(message = "Invalid captureMethodId, cannot be blank")
-    @Size(max = 30, message = "The captureMethodId size must be have max 30 characters")
+    @Size(max = 30, message = "The captureMethodId size must have max 30 characters")
     private String captureMethodId;
 
     @NotBlank(message = "Invalid captureMethodType, cannot be blank")

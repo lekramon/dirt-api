@@ -1,0 +1,202 @@
+openapi: 3.0.3
+
+info:
+  title: DIRT
+  description: |-
+    API Contract - DIRT (Declaração de informações e registro de transações)
+  contact:
+    email: rampinheiro@uolinc.com
+  version: 1.0.11
+
+servers:
+  - url: http://localhost:15050/
+    description: DIRT API LOCAL
+
+tags:
+  - name: transaction
+    description: Operações com as transações para a DIRT
+
+
+paths:
+  /transaction:
+    post:
+      tags:
+        - transaction
+      summary: Registrar uma transação
+      description: Registrar uma transação para a DIRT
+      operationId: registrarTransação
+      requestBody:
+        description: Registrar a transação
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Bad Request, dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    TransactionRequest:
+      required:
+        - ip
+        - amount
+        - tax
+        - accountId
+        - description
+        - captureMethod
+        - transactionType
+        - operation
+        - otherAccount
+      type: object
+      properties:
+        ip:
+          type: string
+          example: '192.158.1.38'
+        amount:
+          type: number
+          format: double
+          example: 99.99
+        tax:
+          type: number
+          format: double
+          example: 10.11
+        accountId:
+          type: integer
+          format: int32
+          example: 1
+        description:
+          type: string
+          example: 'Pagto*Manga Zé'
+        captureMethod:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123'
+            type:
+              type: string
+              example: 'WEB'
+        transactionType:
+          type: string
+          example: 'PIX'
+        operation:
+          type: string
+          example: 'CREDIT'
+        otherAccount:
+          type: object
+          properties:
+            number:
+              type: string
+              example: '1359764-2'
+            agency:
+              type: string
+              example: '0001'
+            bankCode:
+              type: string
+              example: '290'
+      xml:
+        name: TransactionRequest
+
+    TransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: integer
+          format: int32
+          example: 1
+        transactionIp:
+          type: string
+          example: '192.158.1.38'
+        status:
+          type: string
+          example: 'PENDING'
+        transactionAmount:
+          type: number
+          format: double
+          example: 99.99
+        transactionTax:
+          type: number
+          format: double
+          example: 10.11
+        description:
+          type: string
+          example: 'Pagto*Manga Zé'
+        transactionType:
+          type: string
+          example: 'PIX'
+        account:
+          type: object
+          properties:
+            accountId:
+              type: integer
+              format: int32
+              example: 1
+            document:
+              type: string
+              example: '59805714004'
+            accountName:
+              type: string
+              example: 'Han Solo'
+            accountNum:
+              type: string
+              example: '5840231-7'
+            accountNumAgency:
+              type: string
+              example: '0001'
+            accountNumBank:
+              type: string
+              example: '290'
+            accountType:
+              type: string
+              example: 'F'
+        captureMethod:
+          type: object
+          properties:
+            id:
+              type: string
+              example: '123'
+            type:
+              type: string
+              example: 'WEB'
+        operation:
+          type: string
+          example: 'CREDIT'
+        otherAccount:
+          type: object
+          properties:
+            number:
+              type: string
+              example: '1359764-2'
+            agency:
+              type: string
+              example: '0001'
+            bankcode:
+              type: string
+              example: '290'
+      xml:
+        name: TransactionResponse
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+          example: 400
+        message:
+          type: string
+          example: "Invalid field, cannot be null/blank"
+      xml:
+        name: ErrorResponse
