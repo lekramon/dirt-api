@@ -67,8 +67,10 @@ class TransactionServiceTest {
     public void shouldThrowAccountNotExistException() {
         when(accountRepository.findById(NOT_ACCOUNT_ID)).thenReturn(Optional.empty());
 
+        final TransactionRequest transactionRequest = getTransactionRequest(NOT_ACCOUNT_ID, "DEBIT");
+
         Assertions.assertThrows(AccountNotExistException.class, () -> {
-            transactionService.register(getTransactionRequest(NOT_ACCOUNT_ID, "DEBIT"));
+            transactionService.register(transactionRequest);
         });
     }
 
