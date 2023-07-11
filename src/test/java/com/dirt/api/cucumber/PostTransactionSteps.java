@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PostTransactionSteps {
 
-
     private static final String SERVER = "http://localhost:";
     private final TransactionRepository transactionRepository;
     private final DataSource dataSource;
