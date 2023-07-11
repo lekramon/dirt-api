@@ -7,6 +7,11 @@ import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.domain.entity.TransactionEntity;
 
 public class TransactionResponseFactory {
+
+    private TransactionResponseFactory() {
+
+    }
+
     public static TransactionResponse createTransactionResponse(TransactionEntity transactionEntity) {
         final TransactionResponse transactionResponse = new TransactionResponse();
         transactionResponse.setTransactionId(transactionEntity.getTransactionId());
