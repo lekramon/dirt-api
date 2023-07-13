@@ -30,5 +30,6 @@ Funcionalidade: Registro de transações
     Dado que exista uma requisição com os seguintes parâmetros
       | ip             | amount | tax  | accountId | description        | captureMethodId | captureMethodType | transactionType | operation | otherAccountNumber | otherAccountAgency | otherAccountBankCode |
       | 191.220.32.005 | 150.00 | 0.30 | 6         | Pagto*Bolos Renata | 30491239        | WEB               | PIX             | DEBIT     | 2345678-9          | 0001               | 290                  |
-    Quando o serviço de registro de transações for chamado e estiver indisponível
+    E que o serviço esteja indisponível
+    Quando o serviço de registro de transações for chamado
     Então o serviço deve retornar status code 500 - "Internal Server Error"
