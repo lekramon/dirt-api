@@ -14,6 +14,10 @@ import java.sql.Timestamp;
 
 public class TransactionFactory {
 
+    private TransactionFactory() {
+
+    }
+
     public static TransactionEntity createTransaction(TransactionRequest transactionRequest, AccountEntity accountEntity) {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         final TransactionEntity transactionEntity = new TransactionEntity();

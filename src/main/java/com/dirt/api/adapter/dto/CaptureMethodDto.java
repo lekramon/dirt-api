@@ -1,7 +1,6 @@
 package com.dirt.api.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
