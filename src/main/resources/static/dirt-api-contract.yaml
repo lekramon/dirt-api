@@ -52,6 +52,13 @@ paths:
         - transaction
       summary: Atualizar o status de uma transação
       operationId: atualizarStatusTransação
+      parameters:
+        - in: path
+          name: id
+          description: ID da Transasação
+          required: true
+          schema:
+            type: integer
       requestBody:
         description: Alterar status de uma transação na DIRT
         content:
