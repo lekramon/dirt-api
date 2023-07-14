@@ -55,12 +55,12 @@ paths:
       parameters:
         - in: path
           name: id
-          description: ID da Transasação
+          description: id da transação
           required: true
           schema:
             type: integer
       requestBody:
-        description: Alterar status de uma transação na DIRT
+        description: Alterar status de uma transação para a DIRT
         content:
           application/json:
             schema:
