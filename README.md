@@ -158,7 +158,7 @@ this endpoint, follow these tips:
     }
   ```
 - **To update status of transaction:**
-    - Endpoint: `localhost:15050/transaction{id}`
+    - Endpoint: `localhost:15050/transaction/{id}`
     - Method: `PUT`
     - Request Parameter `{id}`
         - Description: Transaction ID

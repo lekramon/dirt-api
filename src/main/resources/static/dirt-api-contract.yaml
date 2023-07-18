@@ -46,7 +46,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /transaction{id}:
+  /transaction/{id}:
     put:
       tags:
         - transaction
