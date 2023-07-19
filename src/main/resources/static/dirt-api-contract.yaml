@@ -73,7 +73,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/TransactionResponse'
         '400':
-          description: Bad Request
+          description: Bad Request, status inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found, transação não existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '406':
+          description: Not Acceptable, status passado não condiz com o fluxo
           content:
             application/json:
               schema:
@@ -239,6 +251,6 @@ components:
           example: 400
         message:
           type: string
-          example: "Invalid field, cannot be null/blank"
+          example: "Error Message"
       xml:
         name: ErrorResponse
