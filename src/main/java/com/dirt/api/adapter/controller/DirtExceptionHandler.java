@@ -3,6 +3,8 @@ package com.dirt.api.adapter.controller;
 import com.dirt.api.adapter.dto.response.ErrorResponse;
 import com.dirt.api.domain.exception.AccountNotExistException;
 import com.dirt.api.domain.exception.EnumNotExistException;
+import com.dirt.api.domain.exception.StatusValidateException;
+import com.dirt.api.domain.exception.TransactionNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -30,5 +32,15 @@ public class DirtExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(errorResponsesList);
+    }
+
+    @ExceptionHandler(TransactionNotExistException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+    }
+
+    @ExceptionHandler(StatusValidateException.class)
+    public ResponseEntity<ErrorResponse> handleNotAcceptableException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.value(), exception.getMessage()));
     }
 }
