@@ -53,7 +53,7 @@ class TransactionControllerTest {
 
     @Test
     public void shouldRegisterTransaction() {
-        when(transactionService.register(any(TransactionRequest.class))).thenReturn(getTransactionEntity());
+        when(transactionService.registerTransaction(any(TransactionRequest.class))).thenReturn(getTransactionEntity());
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
         final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse());
