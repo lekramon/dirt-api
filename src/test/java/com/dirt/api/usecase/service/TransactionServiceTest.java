@@ -56,7 +56,7 @@ class TransactionServiceTest {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
         when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
 
-        final TransactionEntity actualTransactionEntity = transactionService.register(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
+        final TransactionEntity actualTransactionEntity = transactionService.registerTransaction(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
         final TransactionEntity expectedTransactionEntity = getTransactionEntity();
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
@@ -70,7 +70,7 @@ class TransactionServiceTest {
         final TransactionRequest transactionRequest = getTransactionRequest(NOT_ACCOUNT_ID, "DEBIT");
 
         Assertions.assertThrows(AccountNotExistException.class, () -> {
-            transactionService.register(transactionRequest);
+            transactionService.registerTransaction(transactionRequest);
         });
     }
 
