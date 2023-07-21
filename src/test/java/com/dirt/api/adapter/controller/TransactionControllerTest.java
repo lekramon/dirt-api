@@ -3,6 +3,7 @@ package com.dirt.api.adapter.controller;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.request.UpdateStatusRequest;
 import com.dirt.api.adapter.dto.response.AccountResponse;
 import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.domain.entity.AccountEntity;
@@ -22,6 +23,7 @@ import java.sql.Timestamp;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,10 +55,21 @@ class TransactionControllerTest {
 
     @Test
     public void shouldRegisterTransaction() {
-        when(transactionService.registerTransaction(any(TransactionRequest.class))).thenReturn(getTransactionEntity());
+        when(transactionService.registerTransaction(any(TransactionRequest.class))).thenReturn(getTransactionEntity(StatusEnum.PENDING));
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
-        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse());
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("PENDING"));
+
+        Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
+        assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
+    }
+
+    @Test
+    public void shouldUpdateStatusTransaction() {
+        when(transactionService.updateTransactionStatusById(anyLong(), any(UpdateStatusRequest.class))).thenReturn(getTransactionEntity(StatusEnum.SUCCESS));
+
+        final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.updateTransactionStatus(1L, getUpdateStatusRequest("SUCCESS"));
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransactionUpdated(getTransactionResponse("SUCCESS"));
 
         Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
@@ -64,6 +77,10 @@ class TransactionControllerTest {
 
     private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransaction(TransactionResponse transactionResponse) {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
+    }
+
+    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransactionUpdated(TransactionResponse transactionResponse) {
+        return ResponseEntity.status(HttpStatus.OK).body(transactionResponse);
     }
 
     private AccountEntity getAccountEntity() {
@@ -78,7 +95,7 @@ class TransactionControllerTest {
         return accountEntity;
     }
 
-    private TransactionEntity getTransactionEntity() {
+    private TransactionEntity getTransactionEntity(StatusEnum status) {
         final TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setTransactionId(1L);
         transactionEntity.setTransactionAccount(getAccountEntity());
@@ -91,7 +108,7 @@ class TransactionControllerTest {
         transactionEntity.setTransactionType(TRANSACTION_TYPE);
         transactionEntity.setOperation(OPERATION);
         transactionEntity.setTransactionDat(Timestamp.valueOf("2023-06-22 13:10:46.735"));
-        transactionEntity.setStatus(StatusEnum.PENDING);
+        transactionEntity.setStatus(status);
         transactionEntity.setTransactionOtherAccount(TRANSACTION_OTHER_ACCOUNT);
         transactionEntity.setTransactionOtherAccountAgency(TRANSACTION_OTHER_ACCOUNT_AGENCY);
         transactionEntity.setTransactionOtherAccountBank(TRANSACTION_OTHER_ACCOUNT_BANK);
@@ -121,10 +138,10 @@ class TransactionControllerTest {
         return transactionRequest;
     }
 
-    private TransactionResponse getTransactionResponse() {
+    private TransactionResponse getTransactionResponse(String status) {
         final TransactionResponse transactionResponse = new TransactionResponse();
         transactionResponse.setTransactionId(1L);
-        transactionResponse.setStatus("PENDING");
+        transactionResponse.setStatus(status);
         transactionResponse.setTransactionIp(getTransactionRequest().getIp());
         transactionResponse.setTransactionAmount(getTransactionRequest().getAmount());
         transactionResponse.setTransactionTax(getTransactionRequest().getTax());
@@ -150,6 +167,15 @@ class TransactionControllerTest {
         accountResponse.setAccountType(ACCOUNT_TYPE);
 
         return accountResponse;
+    }
+
+    private UpdateStatusRequest getUpdateStatusRequest(String status) {
+        UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+
+        updateStatusRequest.setStatus(status);
+
+        return updateStatusRequest;
+
     }
 
 }
