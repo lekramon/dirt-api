@@ -3,6 +3,7 @@ package com.dirt.api.usecase.service;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.request.UpdateStatusRequest;
 import com.dirt.api.adapter.repository.AccountRepository;
 import com.dirt.api.adapter.repository.TransactionRepository;
 import com.dirt.api.domain.entity.AccountEntity;
@@ -12,6 +13,8 @@ import com.dirt.api.domain.enums.OperationEnum;
 import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.domain.exception.AccountNotExistException;
+import com.dirt.api.domain.exception.StatusValidateException;
+import com.dirt.api.domain.exception.TransactionNotExistException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,13 +58,23 @@ class TransactionServiceTest {
     @Test
     public void shouldRegisterTransaction() {
         when(accountRepository.findById(getAccountEntity().getAccountId())).thenReturn(Optional.of(getAccountEntity()));
-        when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity());
+        when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity(StatusEnum.PENDING));
 
         final TransactionEntity actualTransactionEntity = transactionService.registerTransaction(getTransactionRequest(ACCOUNT_ID, "CREDIT"));
-        final TransactionEntity expectedTransactionEntity = getTransactionEntity();
+        final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.PENDING);
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
+    }
 
+    @Test
+    public void shouldUpdateTransactionStatus() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.PENDING)));
+        when(transactionRepository.save(any(TransactionEntity.class))).thenReturn(getTransactionEntity(StatusEnum.SUCCESS));
+
+        final TransactionEntity actualTransactionEntity = transactionService.updateTransactionStatusById(1, getUpdateStatusRequest("SUCCESS"));
+        final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.SUCCESS);
+
+        assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
     }
 
     @Test
@@ -71,6 +85,39 @@ class TransactionServiceTest {
 
         Assertions.assertThrows(AccountNotExistException.class, () -> {
             transactionService.registerTransaction(transactionRequest);
+        });
+    }
+
+    @Test
+    public void shouldThrowTransactionNotExistException() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+
+        Assertions.assertThrows(TransactionNotExistException.class, () -> {
+            transactionService.updateTransactionStatusById(3L, updateStatusRequest);
+        });
+    }
+
+    @Test
+    public void shouldThrowValidateStatusTransaction() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.CANCELED)));
+
+        final UpdateStatusRequest differentStatusUpdateRequest = getUpdateStatusRequest("SUCCESS");
+
+        Assertions.assertThrows(StatusValidateException.class, () -> {
+            transactionService.updateTransactionStatusById(1L, differentStatusUpdateRequest);
+        });
+    }
+
+    @Test
+    public void shouldThrowValidateStatusTransactionSameStatus() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.PENDING)));
+
+        final UpdateStatusRequest sameStatusUpdateRequest = getUpdateStatusRequest("PENDING");
+
+        Assertions.assertThrows(StatusValidateException.class, () -> {
+            transactionService.updateTransactionStatusById(1L, sameStatusUpdateRequest);
         });
     }
 
@@ -109,7 +156,7 @@ class TransactionServiceTest {
         return transactionRequest;
     }
 
-    private TransactionEntity getTransactionEntity() {
+    private TransactionEntity getTransactionEntity(StatusEnum status) {
         final TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setTransactionAccount(getAccountEntity());
         transactionEntity.setTransactionIp(TRANSACTION_IP);
@@ -121,11 +168,19 @@ class TransactionServiceTest {
         transactionEntity.setTransactionType(TRANSACTION_TYPE);
         transactionEntity.setOperation(OPERATION);
         transactionEntity.setTransactionDat(Timestamp.valueOf("2023-06-22 13:10:46.735"));
-        transactionEntity.setStatus(StatusEnum.PENDING);
+        transactionEntity.setStatus(status);
         transactionEntity.setTransactionOtherAccount(TRANSACTION_OTHER_ACCOUNT);
         transactionEntity.setTransactionOtherAccountAgency(TRANSACTION_OTHER_ACCOUNT_AGENCY);
         transactionEntity.setTransactionOtherAccountBank(TRANSACTION_OTHER_ACCOUNT_BANK);
         return transactionEntity;
     }
 
+    private UpdateStatusRequest getUpdateStatusRequest(String status) {
+        UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+
+        updateStatusRequest.setStatus(status);
+
+        return updateStatusRequest;
+
+    }
 }
