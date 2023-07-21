@@ -32,7 +32,7 @@ public class TransactionService {
     public TransactionEntity updateTransactionStatusById(long id, UpdateStatusRequest updateStatusRequest) {
         final TransactionEntity transactionEntity = getTransactionEntityById(id);
         validateStatusTransactionFromStateMachine(transactionEntity.getStatus(), StatusEnum.fromValue(updateStatusRequest.getStatus()));
-        return transactionRepository.save(updateTransactionStatusById(updateStatusRequest, transactionEntity));
+        return transactionRepository.save(updateTransactionStatusByEntity(updateStatusRequest, transactionEntity));
     }
 
     private AccountEntity getAccountEntityById(long id) {
@@ -45,7 +45,7 @@ public class TransactionService {
                 .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + id + " doesn't exist"));
     }
 
-    private TransactionEntity updateTransactionStatusById(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
+    private TransactionEntity updateTransactionStatusByEntity(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
 
         transactionEntity.setStatus(StatusEnum.fromValue(updateStatusRequest.getStatus()));
 
