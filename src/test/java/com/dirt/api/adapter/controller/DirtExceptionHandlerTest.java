@@ -3,6 +3,8 @@ package com.dirt.api.adapter.controller;
 import com.dirt.api.adapter.dto.response.ErrorResponse;
 import com.dirt.api.domain.exception.AccountNotExistException;
 import com.dirt.api.domain.exception.EnumNotExistException;
+import com.dirt.api.domain.exception.StatusValidateException;
+import com.dirt.api.domain.exception.TransactionNotExistException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,12 +62,42 @@ class DirtExceptionHandlerTest {
         assertThat(expectedListResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(actualListResponseEntity.getBody());
     }
 
+    @Test
+    public void shouldHandleTransactionNotExistException() {
+        final TransactionNotExistException exception = new TransactionNotExistException("message");
+
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseTransaction(exception);
+        final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotFoundException(exception);
+
+        assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
+        assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
+    }
+
+    @Test
+    public void shouldHandleStatusValidateException() {
+        final StatusValidateException exception = new StatusValidateException("message");
+
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseStatusValidate(exception);
+        final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotAcceptableException(exception);
+
+        assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
+        assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
+    }
+
     private ResponseEntity<ErrorResponse> getErrorResponseEnum(EnumNotExistException exception) {
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
     }
 
     private ResponseEntity<ErrorResponse> getErrorResponseAccount(AccountNotExistException exception) {
         return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
+    }
+
+    private ResponseEntity<ErrorResponse> getErrorResponseTransaction(TransactionNotExistException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+    }
+
+    private ResponseEntity<ErrorResponse> getErrorResponseStatusValidate(StatusValidateException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.value(), exception.getMessage()));
     }
 
     private ResponseEntity<List<ErrorResponse>> getErrorResponses(List<ObjectError> objectErrors) {
