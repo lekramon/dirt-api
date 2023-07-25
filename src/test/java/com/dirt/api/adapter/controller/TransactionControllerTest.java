@@ -58,7 +58,7 @@ class TransactionControllerTest {
         when(transactionService.registerTransaction(any(TransactionRequest.class))).thenReturn(getTransactionEntity(StatusEnum.PENDING));
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
-        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("PENDING"));
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("PENDING"), HttpStatus.CREATED);
 
         Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
@@ -69,18 +69,14 @@ class TransactionControllerTest {
         when(transactionService.updateTransactionStatusById(anyLong(), any(UpdateStatusRequest.class))).thenReturn(getTransactionEntity(StatusEnum.SUCCESS));
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.updateTransactionStatus(1L, getUpdateStatusRequest("SUCCESS"));
-        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransactionUpdated(getTransactionResponse("SUCCESS"));
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("SUCCESS"), HttpStatus.OK);
 
         Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
     }
 
-    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransaction(TransactionResponse transactionResponse) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
-    }
-
-    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransactionUpdated(TransactionResponse transactionResponse) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionResponse);
+    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
+        return ResponseEntity.status(status).body(transactionResponse);
     }
 
     private AccountEntity getAccountEntity() {
@@ -175,7 +171,5 @@ class TransactionControllerTest {
         updateStatusRequest.setStatus(status);
 
         return updateStatusRequest;
-
     }
-
 }
