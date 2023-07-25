@@ -50,7 +50,6 @@ class TransactionControllerTest {
     private static final String TRANSACTION_OTHER_ACCOUNT_BANK = "290";
 
     private final TransactionService transactionService = mock(TransactionService.class);
-
     private final TransactionController transactionController = new TransactionController(transactionService);
 
     @Test
@@ -58,7 +57,7 @@ class TransactionControllerTest {
         when(transactionService.registerTransaction(any(TransactionRequest.class))).thenReturn(getTransactionEntity(StatusEnum.PENDING));
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
-        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("PENDING"), HttpStatus.CREATED);
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getResponseEntityTransaction(getTransactionResponse("PENDING"), HttpStatus.CREATED);
 
         Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
@@ -69,13 +68,13 @@ class TransactionControllerTest {
         when(transactionService.updateTransactionStatusById(anyLong(), any(UpdateStatusRequest.class))).thenReturn(getTransactionEntity(StatusEnum.SUCCESS));
 
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.updateTransactionStatus(1L, getUpdateStatusRequest("SUCCESS"));
-        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getTransactionResponseEntityTransaction(getTransactionResponse("SUCCESS"), HttpStatus.OK);
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getResponseEntityTransaction(getTransactionResponse("SUCCESS"), HttpStatus.OK);
 
         Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
     }
 
-    private ResponseEntity<TransactionResponse> getTransactionResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
+    private ResponseEntity<TransactionResponse> getResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
         return ResponseEntity.status(status).body(transactionResponse);
     }
 

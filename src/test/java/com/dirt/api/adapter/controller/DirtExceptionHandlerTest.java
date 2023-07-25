@@ -29,7 +29,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleTransactionRequestEnumNotExistException() {
         final EnumNotExistException exception = new EnumNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.BAD_REQUEST);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.BAD_REQUEST);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -40,7 +40,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleAccountNotExistException() {
         final AccountNotExistException exception = new AccountNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.BAD_REQUEST);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.BAD_REQUEST);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -66,7 +66,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleTransactionNotExistException() {
         final TransactionNotExistException exception = new TransactionNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.NOT_FOUND);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.NOT_FOUND);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotFoundException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -77,14 +77,14 @@ class DirtExceptionHandlerTest {
     public void shouldHandleStatusValidateException() {
         final StatusValidateException exception = new StatusValidateException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.NOT_ACCEPTABLE);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.NOT_ACCEPTABLE);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotAcceptableException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
     }
 
-    private ResponseEntity<ErrorResponse> getErrorResponse(RuntimeException exception, HttpStatus status) {
+    private ResponseEntity<ErrorResponse> getErrorResponseEntity(RuntimeException exception, HttpStatus status) {
         return ResponseEntity.status(status).body(new ErrorResponse(status.value(), exception.getMessage()));
     }
 
