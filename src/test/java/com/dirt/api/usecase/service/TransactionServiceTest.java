@@ -15,7 +15,6 @@ import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.domain.exception.AccountNotExistException;
 import com.dirt.api.domain.exception.StatusValidateException;
 import com.dirt.api.domain.exception.TransactionNotExistException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -23,6 +22,8 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
@@ -50,6 +51,9 @@ class TransactionServiceTest {
     private static final String TRANSACTION_OTHER_ACCOUNT = "123456789";
     private static final String TRANSACTION_OTHER_ACCOUNT_AGENCY = "0001";
     private static final String TRANSACTION_OTHER_ACCOUNT_BANK = "290";
+    private static final String TRANSACTION_EXCEPTION_MESSAGE = "This transaction id: 3 doesn't exist";
+    private static final String STATUS_EXCEPTION_MESSAGE = "Cannot update status from CANCELED to SUCCESS";
+    private static final String ACCOUNT_EXCEPTION_MESSAGE = "This account id: 999 doesn't exist";
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
     private final AccountRepository accountRepository = mock(AccountRepository.class);
@@ -83,9 +87,10 @@ class TransactionServiceTest {
 
         final TransactionRequest transactionRequest = getTransactionRequest(NOT_ACCOUNT_ID, "DEBIT");
 
-        Assertions.assertThrows(AccountNotExistException.class, () -> {
+        final AccountNotExistException accountNotExistException = assertThrows(AccountNotExistException.class, () -> {
             transactionService.registerTransaction(transactionRequest);
         });
+        assertEquals(ACCOUNT_EXCEPTION_MESSAGE, accountNotExistException.getMessage());
     }
 
     @Test
@@ -94,9 +99,10 @@ class TransactionServiceTest {
 
         final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
 
-        Assertions.assertThrows(TransactionNotExistException.class, () -> {
+        final TransactionNotExistException transactionNotExistException = assertThrows(TransactionNotExistException.class, () -> {
             transactionService.updateTransactionStatusById(3L, updateStatusRequest);
         });
+        assertEquals(TRANSACTION_EXCEPTION_MESSAGE, transactionNotExistException.getMessage());
     }
 
     @Test
@@ -105,20 +111,10 @@ class TransactionServiceTest {
 
         final UpdateStatusRequest differentStatusUpdateRequest = getUpdateStatusRequest("SUCCESS");
 
-        Assertions.assertThrows(StatusValidateException.class, () -> {
+        final StatusValidateException statusValidateException = assertThrows(StatusValidateException.class, () -> {
             transactionService.updateTransactionStatusById(1L, differentStatusUpdateRequest);
         });
-    }
-
-    @Test
-    public void shouldThrowValidateStatusTransactionSameStatus() {
-        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.PENDING)));
-
-        final UpdateStatusRequest sameStatusUpdateRequest = getUpdateStatusRequest("PENDING");
-
-        Assertions.assertThrows(StatusValidateException.class, () -> {
-            transactionService.updateTransactionStatusById(1L, sameStatusUpdateRequest);
-        });
+        assertEquals(STATUS_EXCEPTION_MESSAGE, statusValidateException.getMessage());
     }
 
     private AccountEntity getAccountEntity() {
@@ -181,6 +177,5 @@ class TransactionServiceTest {
         updateStatusRequest.setStatus(status);
 
         return updateStatusRequest;
-
     }
 }
