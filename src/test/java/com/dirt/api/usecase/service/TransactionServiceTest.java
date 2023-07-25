@@ -51,9 +51,10 @@ class TransactionServiceTest {
     private static final String TRANSACTION_OTHER_ACCOUNT = "123456789";
     private static final String TRANSACTION_OTHER_ACCOUNT_AGENCY = "0001";
     private static final String TRANSACTION_OTHER_ACCOUNT_BANK = "290";
-    private static final String TRANSACTION_EXCEPTION_MESSAGE = "This transaction id: 3 doesn't exist";
-    private static final String STATUS_EXCEPTION_MESSAGE = "Cannot update status from CANCELED to SUCCESS";
-    private static final String ACCOUNT_EXCEPTION_MESSAGE = "This account id: 999 doesn't exist";
+    private static final String TRANSACTION_NOT_EXIST_MESSAGE = "This transaction id: 3 doesn't exist";
+    private static final String INVALID_STATUS_CANCELED_CHANGE_MESSAGE = "Cannot update status from CANCELED to SUCCESS";
+    private static final String INVALID_STATUS_SUCCESS_CHANGE_MESSAGE = "Cannot update status from SUCCESS to PENDING";
+    private static final String ACCOUNT_NOT_EXIST_MESSAGE = "This account id: 999 doesn't exist";
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
     private final AccountRepository accountRepository = mock(AccountRepository.class);
@@ -90,7 +91,7 @@ class TransactionServiceTest {
         final AccountNotExistException accountNotExistException = assertThrows(AccountNotExistException.class, () -> {
             transactionService.registerTransaction(transactionRequest);
         });
-        assertEquals(ACCOUNT_EXCEPTION_MESSAGE, accountNotExistException.getMessage());
+        assertEquals(ACCOUNT_NOT_EXIST_MESSAGE, accountNotExistException.getMessage());
     }
 
     @Test
@@ -102,19 +103,33 @@ class TransactionServiceTest {
         final TransactionNotExistException transactionNotExistException = assertThrows(TransactionNotExistException.class, () -> {
             transactionService.updateTransactionStatusById(3L, updateStatusRequest);
         });
-        assertEquals(TRANSACTION_EXCEPTION_MESSAGE, transactionNotExistException.getMessage());
+        assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistException.getMessage());
     }
 
     @Test
-    public void shouldThrowValidateStatusTransaction() {
+    public void shouldThrowStatusValidateExceptionForCanceledStatus() {
         when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.CANCELED)));
 
-        final UpdateStatusRequest differentStatusUpdateRequest = getUpdateStatusRequest("SUCCESS");
+        final UpdateStatusRequest updateStatusRequest = getUpdateStatusRequest("SUCCESS");
 
-        final StatusValidateException statusValidateException = assertThrows(StatusValidateException.class, () -> {
-            transactionService.updateTransactionStatusById(1L, differentStatusUpdateRequest);
+        final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
+            transactionService.updateTransactionStatusById(1L, updateStatusRequest);
         });
-        assertEquals(STATUS_EXCEPTION_MESSAGE, statusValidateException.getMessage());
+
+        assertEquals(INVALID_STATUS_CANCELED_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
+    }
+
+    @Test
+    public void shouldThrowStatusValidateExceptionForSuccessStatus() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.SUCCESS)));
+
+        final UpdateStatusRequest updateStatusRequest = getUpdateStatusRequest("PENDING");
+
+        final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
+            transactionService.updateTransactionStatusById(1L, updateStatusRequest);
+        });
+
+        assertEquals(INVALID_STATUS_SUCCESS_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
     }
 
     private AccountEntity getAccountEntity() {
