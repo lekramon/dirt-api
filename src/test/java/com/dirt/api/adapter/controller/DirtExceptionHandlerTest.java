@@ -29,7 +29,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleTransactionRequestEnumNotExistException() {
         final EnumNotExistException exception = new EnumNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEnum(exception);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.BAD_REQUEST);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -40,7 +40,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleAccountNotExistException() {
         final AccountNotExistException exception = new AccountNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseAccount(exception);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.BAD_REQUEST);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -66,7 +66,7 @@ class DirtExceptionHandlerTest {
     public void shouldHandleTransactionNotExistException() {
         final TransactionNotExistException exception = new TransactionNotExistException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseTransaction(exception);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.NOT_FOUND);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotFoundException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
@@ -77,27 +77,15 @@ class DirtExceptionHandlerTest {
     public void shouldHandleStatusValidateException() {
         final StatusValidateException exception = new StatusValidateException("message");
 
-        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseStatusValidate(exception);
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponse(exception, HttpStatus.NOT_ACCEPTABLE);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotAcceptableException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
     }
 
-    private ResponseEntity<ErrorResponse> getErrorResponseEnum(EnumNotExistException exception) {
-        return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
-    }
-
-    private ResponseEntity<ErrorResponse> getErrorResponseAccount(AccountNotExistException exception) {
-        return ResponseEntity.badRequest().body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage()));
-    }
-
-    private ResponseEntity<ErrorResponse> getErrorResponseTransaction(TransactionNotExistException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
-    }
-
-    private ResponseEntity<ErrorResponse> getErrorResponseStatusValidate(StatusValidateException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.value(), exception.getMessage()));
+    private ResponseEntity<ErrorResponse> getErrorResponse(RuntimeException exception, HttpStatus status) {
+        return ResponseEntity.status(status).body(new ErrorResponse(status.value(), exception.getMessage()));
     }
 
     private ResponseEntity<List<ErrorResponse>> getErrorResponses(List<ObjectError> objectErrors) {
@@ -115,5 +103,4 @@ class DirtExceptionHandlerTest {
 
         return objectErrorList;
     }
-
 }
