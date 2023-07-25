@@ -31,8 +31,8 @@ public class TransactionService {
 
     public TransactionEntity updateTransactionStatusById(long id, UpdateStatusRequest updateStatusRequest) {
         final TransactionEntity transactionEntity = getTransactionEntityById(id);
-        validateStatusTransactionFromStateMachine(transactionEntity.getStatus(), StatusEnum.fromValue(updateStatusRequest.getStatus()));
-        return transactionRepository.save(updateTransactionStatusByEntity(updateStatusRequest, transactionEntity));
+        validateStatusTransaction(transactionEntity.getStatus(), StatusEnum.fromValue(updateStatusRequest.getStatus()));
+        return transactionRepository.save(updateTransactionStatus(updateStatusRequest, transactionEntity));
     }
 
     private AccountEntity getAccountEntityById(long id) {
@@ -45,20 +45,14 @@ public class TransactionService {
                 .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + id + " doesn't exist"));
     }
 
-    private TransactionEntity updateTransactionStatusByEntity(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
-
+    private TransactionEntity updateTransactionStatus(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
         transactionEntity.setStatus(StatusEnum.fromValue(updateStatusRequest.getStatus()));
 
         return transactionEntity;
     }
 
-    private void validateStatusTransactionFromStateMachine(StatusEnum currentStatus, StatusEnum newStatus) {
-
-        if ((currentStatus == StatusEnum.SUCCESS || currentStatus == StatusEnum.CANCELED) && (newStatus == StatusEnum.CANCELED || newStatus == StatusEnum.PENDING || newStatus == StatusEnum.SUCCESS)) {
-            throw new StatusValidateException("Cannot update status from " + currentStatus + " to " + newStatus);
-        }
-
-        if (currentStatus == newStatus) {
+    private void validateStatusTransaction(StatusEnum currentStatus, StatusEnum newStatus) {
+        if (currentStatus == StatusEnum.SUCCESS || currentStatus == StatusEnum.CANCELED) {
             throw new StatusValidateException("Cannot update status from " + currentStatus + " to " + newStatus);
         }
     }
