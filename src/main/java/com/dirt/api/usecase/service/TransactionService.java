@@ -31,7 +31,7 @@ public class TransactionService {
 
     public TransactionEntity updateTransactionStatusById(long id, UpdateStatusRequest updateStatusRequest) {
         final TransactionEntity transactionEntity = getTransactionEntityById(id);
-        validateStatusTransaction(transactionEntity.getStatus(), StatusEnum.fromValue(updateStatusRequest.getStatus()));
+        validateStatusTransaction(transactionEntity.getStatus());
         return transactionRepository.save(updateTransactionStatus(updateStatusRequest, transactionEntity));
     }
 
@@ -51,9 +51,9 @@ public class TransactionService {
         return transactionEntity;
     }
 
-    private void validateStatusTransaction(StatusEnum currentStatus, StatusEnum newStatus) {
+    private void validateStatusTransaction(StatusEnum currentStatus) {
         if (currentStatus == StatusEnum.SUCCESS || currentStatus == StatusEnum.CANCELED) {
-            throw new StatusValidateException("Cannot update status from " + currentStatus + " to " + newStatus);
+            throw new StatusValidateException("Cannot update " + currentStatus + " transaction");
         }
     }
 }

@@ -52,8 +52,8 @@ class TransactionServiceTest {
     private static final String TRANSACTION_OTHER_ACCOUNT_AGENCY = "0001";
     private static final String TRANSACTION_OTHER_ACCOUNT_BANK = "290";
     private static final String TRANSACTION_NOT_EXIST_MESSAGE = "This transaction id: 3 doesn't exist";
-    private static final String INVALID_STATUS_CANCELED_CHANGE_MESSAGE = "Cannot update status from CANCELED to SUCCESS";
-    private static final String INVALID_STATUS_SUCCESS_CHANGE_MESSAGE = "Cannot update status from SUCCESS to PENDING";
+    private static final String INVALID_STATUS_CANCELED_CHANGE_MESSAGE = "Cannot update CANCELED transaction";
+    private static final String INVALID_STATUS_SUCCESS_CHANGE_MESSAGE = "Cannot update SUCCESS transaction";
     private static final String ACCOUNT_NOT_EXIST_MESSAGE = "This account id: 999 doesn't exist";
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
@@ -115,7 +115,6 @@ class TransactionServiceTest {
         final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
             transactionService.updateTransactionStatusById(1L, updateStatusRequest);
         });
-
         assertEquals(INVALID_STATUS_CANCELED_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
     }
 
