@@ -10,7 +10,6 @@ import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PostTransactionSteps {
 
@@ -63,21 +63,23 @@ public class PostTransactionSteps {
         this.transactionResponseEntity = createResponseEntityFromResponse(response);
     }
 
-    @Então("o serviço deve retornar status code {int} - {string}")
+    @Então("o serviço de registro deve retornar o status code {int} - {string}")
     public void serviceShouldReturnStatusCode(int expectedStatusCode, String expectedDesCode) {
-        Assertions.assertEquals(expectedStatusCode, transactionResponseEntity.getStatusCodeValue());
-        Assertions.assertEquals(expectedDesCode, HttpStatus.valueOf(transactionResponseEntity.getStatusCodeValue()).getReasonPhrase());
+        assertEquals(expectedStatusCode, transactionResponseEntity.getStatusCodeValue());
+        assertEquals(expectedDesCode, HttpStatus.valueOf(transactionResponseEntity.getStatusCodeValue()).getReasonPhrase());
     }
 
     @Então("a transação deve ser registrada na base de dados com os seguintes dados")
     public void transactionShouldBeRegisteredInDatabase(TransactionEntity transactionEntity) {
         final Optional<TransactionEntity> optionalTransactionEntity = transactionRepository.findById(transactionEntity.getTransactionId());
+
         final TransactionEntity actualTransactionEntity = optionalTransactionEntity.orElse(null);
+
         assertThat(actualTransactionEntity).usingRecursiveComparison().ignoringFields("transactionDat").isEqualTo(transactionEntity);
     }
 
     private ResponseEntity<Object> createResponseEntityFromResponse(Response response) {
-        if (response.getStatusCode() == HttpStatus.CREATED.value()) {
+        if (response.getStatusCode() == (HttpStatus.CREATED.value())) {
             return new ResponseEntity<>(response.as(TransactionResponse.class), HttpStatus.valueOf(response.getStatusCode()));
         }
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
