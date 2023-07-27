@@ -127,7 +127,6 @@ class TransactionServiceTest {
         final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
             transactionService.updateTransactionStatusById(1L, updateStatusRequest);
         });
-
         assertEquals(INVALID_STATUS_SUCCESS_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
     }
 
