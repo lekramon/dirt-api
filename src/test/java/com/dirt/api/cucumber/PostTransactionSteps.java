@@ -79,7 +79,7 @@ public class PostTransactionSteps {
     }
 
     private ResponseEntity<Object> createResponseEntityFromResponse(Response response) {
-        if (response.getStatusCode() == (HttpStatus.CREATED.value())) {
+        if (response.getStatusCode() == HttpStatus.CREATED.value()) {
             return new ResponseEntity<>(response.as(TransactionResponse.class), HttpStatus.valueOf(response.getStatusCode()));
         }
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
