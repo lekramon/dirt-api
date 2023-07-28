@@ -6,7 +6,6 @@ import com.dirt.api.adapter.repository.TransactionRepository;
 import com.dirt.api.domain.entity.TransactionEntity;
 import com.dirt.api.domain.enums.StatusEnum;
 import io.cucumber.java.pt.Dado;
-import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import io.restassured.RestAssured;
@@ -35,18 +34,18 @@ public class PutTransactionSteps {
     }
 
     @Dado("que exista uma transação com os seguintes parâmetros no banco de dados")
-    public void queExistaUmaTransaçãoComOsSeguintesParâmetrosNoBancoDeDados(TransactionEntity transactionEntity) {
+    public void shouldExistTransactionWithParametersInTheDatabase(TransactionEntity transactionEntity) {
         transactionRepository.save(transactionEntity);
     }
 
     @Quando("for requisitada uma alteração de status para {string} na transação de id {int}")
-    public void forRequisitadaUmaAlteraçãoDeStatusParaNaTransaçãoDeId(String status, int id) {
+    public void callUpdateStatusForTransactionId(String status, int id) {
         RestAssured.baseURI = SERVER + serverPort;
 
         final Response response = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(updateStatusRequest(status))
+                .body(getUpdateStatusRequest(status))
                 .when()
                 .put("/transaction/" + id)
                 .then()
@@ -61,8 +60,8 @@ public class PutTransactionSteps {
         assertEquals(expectedDesCode, HttpStatus.valueOf(transactionResponseEntity.getStatusCodeValue()).getReasonPhrase());
     }
 
-    @E("a transação deve ter o status alterado para {string} na base de dados")
-    public void aTransaçãoDeveTerOStatusAlteradoParaNaBaseDeDados(String status, TransactionEntity transactionEntity) {
+    @Então("a transação deve ter o status alterado para {string} na base de dados")
+    public void transactionStatusShouldBeUpdatedInDatabase(String status, TransactionEntity transactionEntity) {
         final StatusEnum statusEnum = StatusEnum.fromValue(status);
 
         final Optional<TransactionEntity> optionalTransactionEntity = transactionRepository.findById(transactionEntity.getTransactionId());
@@ -70,6 +69,7 @@ public class PutTransactionSteps {
         final TransactionEntity actualTransactionEntity = optionalTransactionEntity.orElse(null);
 
         assertThat(actualTransactionEntity.getStatus()).usingRecursiveComparison().isEqualTo(statusEnum);
+        assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(transactionEntity);
     }
 
     private ResponseEntity<Object> createResponseEntityFromResponse(Response response) {
@@ -79,7 +79,7 @@ public class PutTransactionSteps {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
     }
 
-    private UpdateStatusRequest updateStatusRequest(String status) {
+    private UpdateStatusRequest getUpdateStatusRequest(String status) {
         final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
 
         updateStatusRequest.setStatus(status);
