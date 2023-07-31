@@ -42,7 +42,7 @@ public class PostTransactionSteps {
         transaction = transactionRequest;
     }
 
-    @E("que o serviço esteja indisponível")
+    @Dado("que o serviço esteja indisponível")
     public void serviceIsUnavailable() {
         new JdbcTemplate(dataSource).execute("SHUTDOWN");
     }
