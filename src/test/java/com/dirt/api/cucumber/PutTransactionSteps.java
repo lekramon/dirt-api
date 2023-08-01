@@ -1,11 +1,11 @@
 package com.dirt.api.cucumber;
 
-import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.request.UpdateStatusRequest;
 import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.adapter.repository.TransactionRepository;
 import com.dirt.api.domain.entity.TransactionEntity;
+import com.dirt.api.domain.enums.StatusEnum;
 import io.cucumber.java.pt.Dado;
-import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import io.restassured.RestAssured;
@@ -13,75 +13,77 @@ import io.restassured.response.Response;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PostTransactionSteps {
+public class PutTransactionSteps {
 
     private static final String SERVER = "http://localhost:";
     private final TransactionRepository transactionRepository;
-    private final DataSource dataSource;
     private final int serverPort;
-    private TransactionRequest transaction;
+    private TransactionEntity transaction;
     private ResponseEntity<Object> transactionResponseEntity;
 
-    public PostTransactionSteps(TransactionRepository transactionRepository, DataSource dataSource, @LocalServerPort int serverPort) {
+    public PutTransactionSteps(TransactionRepository transactionRepository, @LocalServerPort int serverPort) {
         this.transactionRepository = transactionRepository;
-        this.dataSource = dataSource;
         this.serverPort = serverPort;
     }
 
-    @Dado("que exista uma requisição com os seguintes parâmetros")
-    public void shouldExistRequestWithParameters(TransactionRequest transactionRequest) {
-        transaction = transactionRequest;
+    @Dado("que exista uma transação com os seguintes parâmetros no banco de dados")
+    public void shouldExistTransactionWithParametersInTheDatabase(TransactionEntity transactionEntity) {
+        transactionRepository.save(transactionEntity);
     }
 
-    @Dado("que o serviço esteja indisponível")
-    public void serviceIsUnavailable() {
-        new JdbcTemplate(dataSource).execute("SHUTDOWN");
-    }
-
-    @Quando("o serviço de registro de transações for chamado")
-    public void callPostTransactionService() {
+    @Quando("for requisitada uma alteração de status para {string} na transação de id {int}")
+    public void callUpdateStatusForTransactionId(String status, int id) {
         RestAssured.baseURI = SERVER + serverPort;
 
         final Response response = given()
                 .header("Content-type", "application/json")
                 .and()
-                .body(transaction)
+                .body(getUpdateStatusRequest(status))
                 .when()
-                .post("/transaction")
+                .put("/transaction/" + id)
                 .then()
                 .extract().response();
 
         this.transactionResponseEntity = createResponseEntityFromResponse(response);
     }
 
-    @Então("o serviço de registro deve retornar o status code {int} - {string}")
+    @Então("o serviço de atualização deve retornar o status code {int} - {string}")
     public void serviceShouldReturnStatusCode(int expectedStatusCode, String expectedDesCode) {
         assertEquals(expectedStatusCode, transactionResponseEntity.getStatusCodeValue());
         assertEquals(expectedDesCode, HttpStatus.valueOf(transactionResponseEntity.getStatusCodeValue()).getReasonPhrase());
     }
 
-    @Então("a transação deve ser registrada na base de dados com os seguintes dados")
-    public void transactionShouldBeRegisteredInDatabase(TransactionEntity transactionEntity) {
+    @Então("a transação deve ter o status alterado para {string} na base de dados")
+    public void transactionStatusShouldBeUpdatedInDatabase(String status, TransactionEntity transactionEntity) {
+        final StatusEnum statusEnum = StatusEnum.fromValue(status);
+
         final Optional<TransactionEntity> optionalTransactionEntity = transactionRepository.findById(transactionEntity.getTransactionId());
 
         final TransactionEntity actualTransactionEntity = optionalTransactionEntity.orElse(null);
 
-        assertThat(actualTransactionEntity).usingRecursiveComparison().ignoringFields("transactionDat").isEqualTo(transactionEntity);
+        assertThat(actualTransactionEntity.getStatus()).usingRecursiveComparison().isEqualTo(statusEnum);
+        assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(transactionEntity);
     }
 
     private ResponseEntity<Object> createResponseEntityFromResponse(Response response) {
-        if (response.getStatusCode() == HttpStatus.CREATED.value()) {
+        if (response.getStatusCode() == HttpStatus.OK.value()) {
             return new ResponseEntity<>(response.as(TransactionResponse.class), HttpStatus.valueOf(response.getStatusCode()));
         }
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatusCode()));
+    }
+
+    private UpdateStatusRequest getUpdateStatusRequest(String status) {
+        final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+
+        updateStatusRequest.setStatus(status);
+
+        return updateStatusRequest;
     }
 }

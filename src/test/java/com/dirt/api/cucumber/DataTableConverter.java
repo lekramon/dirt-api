@@ -14,6 +14,7 @@ import com.dirt.api.domain.enums.TransactionTypeEnum;
 import io.cucumber.java.DataTableType;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Map;
 
 public class DataTableConverter {
@@ -98,6 +99,7 @@ public class DataTableConverter {
         transactionEntity.setCaptureMethod(CaptureMethodEnum.fromValue(entry.get("captureMethodType")));
         transactionEntity.setTransactionType(TransactionTypeEnum.fromValue(entry.get("transactionType")));
         transactionEntity.setOperation(OperationEnum.fromValue(entry.get("operation")));
+        transactionEntity.setTransactionDat(Timestamp.valueOf(entry.get("transactionDat")));
         transactionEntity.setStatus(StatusEnum.fromValue(entry.get("status")));
         transactionEntity.setTransactionOtherAccount(entry.get("otherAccountNumber"));
         transactionEntity.setTransactionOtherAccountAgency(entry.get("otherAccountAgency"));
