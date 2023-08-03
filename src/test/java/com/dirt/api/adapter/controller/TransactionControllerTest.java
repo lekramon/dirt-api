@@ -79,7 +79,7 @@ class TransactionControllerTest {
     public void shouldDeleteTransaction() {
         doNothing().when(transactionService).deleteTransaction(anyLong());
 
-        final ResponseEntity<Void> actualResponseEntity = transactionController.deleteTransaction(anyLong());
+        final ResponseEntity<Void> actualResponseEntity = transactionController.deleteTransaction(1L);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
 
         assertEquals(expectedStatusCode, actualResponseEntity.getStatusCode());

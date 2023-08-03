@@ -90,7 +90,7 @@ class TransactionServiceTest {
         when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.CANCELED)));
         doNothing().when(transactionRepository).delete(any(TransactionEntity.class));
 
-        transactionService.deleteTransaction(anyLong());
+        transactionService.deleteTransaction(1L);
 
         verify(transactionRepository, times(1)).delete(any(TransactionEntity.class));
     }
