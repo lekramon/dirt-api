@@ -26,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 class TransactionServiceTest {
@@ -80,6 +79,16 @@ class TransactionServiceTest {
         final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.SUCCESS);
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
+    }
+
+    @Test
+    public void shouldDeleteTransaction() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.CANCELED)));
+        doNothing().when(transactionRepository).delete(any(TransactionEntity.class));
+
+        transactionService.deleteTransaction(anyLong());
+
+        verify(transactionRepository, times(1)).delete(any(TransactionEntity.class));
     }
 
     @Test

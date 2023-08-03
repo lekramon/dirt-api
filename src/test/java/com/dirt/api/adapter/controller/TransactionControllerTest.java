@@ -13,7 +13,6 @@ import com.dirt.api.domain.enums.OperationEnum;
 import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.usecase.service.TransactionService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +21,11 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class TransactionControllerTest {
 
@@ -36,7 +36,6 @@ class TransactionControllerTest {
     private static final String ACCOUNT_NUM_AGENCY = "0001";
     private static final String ACCOUNT_NUM_BANK = "290";
     private static final char ACCOUNT_TYPE = 'F';
-
     private static final String DES_PAGAMENTO = "Payment Ze Manga";
     private static final String TRANSACTION_IP = "192.168.0.1";
     private static final BigDecimal TRANSACTION_AMOUNT = BigDecimal.valueOf(100.0);
@@ -59,7 +58,7 @@ class TransactionControllerTest {
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.registerTransaction(getTransactionRequest());
         final ResponseEntity<TransactionResponse> expectedTransactionResponse = getResponseEntityTransaction(getTransactionResponse("PENDING"), HttpStatus.CREATED);
 
-        Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
+        assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
     }
 
@@ -70,8 +69,19 @@ class TransactionControllerTest {
         final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.updateTransactionStatus(1L, getUpdateStatusRequest("SUCCESS"));
         final ResponseEntity<TransactionResponse> expectedTransactionResponse = getResponseEntityTransaction(getTransactionResponse("SUCCESS"), HttpStatus.OK);
 
-        Assertions.assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
+        assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
+    }
+
+    @Test
+    public void shouldDeleteTransaction() {
+        doNothing().when(transactionService).deleteTransaction(anyLong());
+
+        final ResponseEntity<Void> actualResponseEntity = transactionController.deleteTransaction(anyLong());
+        final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        assertEquals(expectedStatusCode, actualResponseEntity.getStatusCode());
+        assertNull(actualResponseEntity.getBody());
     }
 
     private ResponseEntity<TransactionResponse> getResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
