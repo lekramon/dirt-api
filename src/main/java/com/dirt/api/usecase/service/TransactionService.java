@@ -35,6 +35,11 @@ public class TransactionService {
         return transactionRepository.save(updateTransactionStatus(updateStatusRequest, transactionEntity));
     }
 
+    public void deleteTransaction(long id) {
+        final TransactionEntity transactionEntity = getTransactionEntityById(id);
+        transactionRepository.delete(transactionEntity);
+    }
+
     private AccountEntity getAccountEntityById(long id) {
         return accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotExistException("This account id: " + id + " doesn't exist"));
