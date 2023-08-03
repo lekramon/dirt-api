@@ -34,7 +34,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Created
+          description: Created, transação criada
           content:
             application/json:
               schema:
@@ -67,7 +67,7 @@ paths:
               $ref: '#/components/schemas/UpdateStatusRequest'
       responses:
         '200':
-          description: OK
+          description: OK, status da transação atualizada
           content:
             application/json:
               schema:
@@ -86,6 +86,27 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '406':
           description: Not Acceptable, status passado não condiz com o fluxo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - transaction
+      summary: Apagar uma transação
+      operationId: apagarTransação
+      parameters:
+        - in: path
+          name: id
+          description: id da transação
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK, transação apagada
+        '404':
+          description: Not Found, transação não existe
           content:
             application/json:
               schema:

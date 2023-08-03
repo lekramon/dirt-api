@@ -172,32 +172,39 @@ this endpoint, follow these tips:
     - Status Code: 200 - OK
     - Response:
   ```json
-  {
-  "transactionId": 1,
-  "transactionIp": "192.158.1.38",
-  "status": "SUCCESS",
-  "transactionAmount": 99.99,
-  "transactionTax": 10.11,
-  "description": "Pagto*Manga Zé",
-  "transactionType": "PIX",
-  "account": {
-    "accountId": 1,
-    "document": "59805714004",
-    "accountName": "Han Solo",
-    "accountNum": "5840231-7",
-    "accountNumAgency": "0001",
-    "accountNumBank": "290",
-    "accountType": "F"
-     },
-  "captureMethod": {
-    "id": "123",
-    "type": "WEB"
-     },
-  "operation": "CREDIT",
-  "otherAccount": {
-    "number": "1359764-2",
-    "agency": "0001",
-    "bankcode": "290"
+    {
+    "transactionId": 1,
+    "transactionIp": "192.158.1.38",
+    "status": "SUCCESS",
+    "transactionAmount": 99.99,
+    "transactionTax": 10.11,
+    "description": "Pagto*Manga Zé",
+    "transactionType": "PIX",
+    "account": {
+      "accountId": 1,
+      "document": "59805714004",
+      "accountName": "Han Solo",
+      "accountNum": "5840231-7",
+      "accountNumAgency": "0001",
+      "accountNumBank": "290",
+      "accountType": "F"
+       },
+    "captureMethod": {
+      "id": "123",
+      "type": "WEB"
+       },
+    "operation": "CREDIT",
+    "otherAccount": {
+      "number": "1359764-2",
+      "agency": "0001",
+      "bankcode": "290"
+      }
     }
-  }
   ```
+
+- **To delete a transaction:**
+  - Endpoint: `localhost:15050/transaction/{id}`
+  - Method: `DELETE`
+  - Request Parameter `{id}`
+    - Description: Transaction ID
+  - Status Code: 200 - OK
