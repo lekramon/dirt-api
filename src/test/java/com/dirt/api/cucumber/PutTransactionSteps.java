@@ -25,7 +25,6 @@ public class PutTransactionSteps {
     private static final String SERVER = "http://localhost:";
     private final TransactionRepository transactionRepository;
     private final int serverPort;
-    private TransactionEntity transaction;
     private ResponseEntity<Object> transactionResponseEntity;
 
     public PutTransactionSteps(TransactionRepository transactionRepository, @LocalServerPort int serverPort) {
@@ -39,7 +38,7 @@ public class PutTransactionSteps {
     }
 
     @Quando("for requisitada uma alteração de status para {string} na transação de id {int}")
-    public void callUpdateStatusForTransactionId(String status, int id) {
+    public void callUpdateStatusForTransactionId(String status, int transactionId) {
         RestAssured.baseURI = SERVER + serverPort;
 
         final Response response = given()
@@ -47,7 +46,7 @@ public class PutTransactionSteps {
                 .and()
                 .body(getUpdateStatusRequest(status))
                 .when()
-                .put("/transaction/" + id)
+                .put("/transaction/" + transactionId)
                 .then()
                 .extract().response();
 
