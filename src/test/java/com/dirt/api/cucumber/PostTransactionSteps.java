@@ -5,7 +5,6 @@ import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.adapter.repository.TransactionRepository;
 import com.dirt.api.domain.entity.TransactionEntity;
 import io.cucumber.java.pt.Dado;
-import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
 import io.restassured.RestAssured;
