@@ -35,14 +35,14 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionResponse> updateTransactionStatus(@PathVariable long id, @Valid @RequestBody UpdateStatusRequest updateStatusRequest) {
-        final TransactionResponse transactionResponse = TransactionResponseFactory.createTransactionResponse(transactionService.updateTransactionStatusById(id, updateStatusRequest));
+    public ResponseEntity<TransactionResponse> updateTransactionStatus(@PathVariable("id") long transactionId, @Valid @RequestBody UpdateStatusRequest updateStatusRequest) {
+        final TransactionResponse transactionResponse = TransactionResponseFactory.createTransactionResponse(transactionService.updateTransactionStatusById(transactionId, updateStatusRequest));
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable long id) {
-        transactionService.deleteTransaction(id);
+    public ResponseEntity<Void> deleteTransaction(@PathVariable("id") long transactionId) {
+        transactionService.deleteTransaction(transactionId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
