@@ -27,6 +27,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class TransactionControllerTest {
@@ -62,6 +64,7 @@ class TransactionControllerTest {
 
         assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
+        verify(transactionService, times(1)).registerTransaction(any(TransactionRequest.class));
     }
 
     @Test
@@ -73,6 +76,7 @@ class TransactionControllerTest {
 
         assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
         assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
+        verify(transactionService, times(1)).updateTransactionStatusById(anyLong(), any(UpdateStatusRequest.class));
     }
 
     @Test
@@ -84,6 +88,7 @@ class TransactionControllerTest {
 
         assertEquals(expectedStatusCode, actualResponseEntity.getStatusCode());
         assertNull(actualResponseEntity.getBody());
+        verify(transactionService, times(1)).deleteTransaction(1L);
     }
 
     private ResponseEntity<TransactionResponse> getResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
