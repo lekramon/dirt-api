@@ -96,6 +96,7 @@ class TransactionServiceTest {
 
         transactionService.deleteTransaction(1L);
 
+        verify(transactionRepository, times(1)).findById(1L);
         verify(transactionRepository, times(1)).delete(any(TransactionEntity.class));
     }
 
