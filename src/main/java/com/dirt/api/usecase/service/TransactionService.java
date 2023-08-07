@@ -29,20 +29,25 @@ public class TransactionService {
         return transactionRepository.save(TransactionFactory.createTransaction(transactionRequest, accountEntity));
     }
 
-    public TransactionEntity updateTransactionStatusById(long id, UpdateStatusRequest updateStatusRequest) {
-        final TransactionEntity transactionEntity = getTransactionEntityById(id);
+    public TransactionEntity updateTransactionStatusById(long transactionId, UpdateStatusRequest updateStatusRequest) {
+        final TransactionEntity transactionEntity = getTransactionEntityById(transactionId);
         validateStatusTransaction(transactionEntity.getStatus());
         return transactionRepository.save(updateTransactionStatus(updateStatusRequest, transactionEntity));
     }
 
-    private AccountEntity getAccountEntityById(long id) {
-        return accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotExistException("This account id: " + id + " doesn't exist"));
+    public void deleteTransaction(long transactionId) {
+        final TransactionEntity transactionEntity = getTransactionEntityById(transactionId);
+        transactionRepository.delete(transactionEntity);
     }
 
-    private TransactionEntity getTransactionEntityById(long id) {
-        return transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + id + " doesn't exist"));
+    private AccountEntity getAccountEntityById(long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotExistException("This account id: " + accountId + " doesn't exist"));
+    }
+
+    private TransactionEntity getTransactionEntityById(long transactionId) {
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + transactionId + " doesn't exist"));
     }
 
     private TransactionEntity updateTransactionStatus(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
