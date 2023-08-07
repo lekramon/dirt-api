@@ -8,7 +8,7 @@ Funcionalidade: Apagar transações
       | 1             | 178.113.45.003 | 20.00             | 0.30           | 1         | Han Solo    | 59805714004     | 5840231-7  | 0001             | 290            | F           | Pagto*Gas Station seu Zé | 10021           | WEB               | PIX             | CREDIT    | 2023-07-26 00:00:00.000000 | PENDING | 5432109-8          | 8485               | 341                  |
     Quando for requisitada que a transação de id 1 seja apagada
     Então o serviço de apagar deve retornar o status code 200 - "OK"
-    E a transação deve ter sido apagada no banco de dados
+    E a transação de id 1 deve ter sido apagada no banco de dados
 
   Cenário: Apagar uma transação que não existe no banco de dados
     Quando for requisitada que a transação de id 6 seja apagada

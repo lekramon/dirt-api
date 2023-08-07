@@ -11,9 +11,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DeleteTransactionSteps {
 
@@ -28,12 +30,12 @@ public class DeleteTransactionSteps {
     }
 
     @Dado("que haja uma transação com os seguintes parâmetros no banco de dados")
-    public void queHajaUmaTransaçãoComOsSeguintesParâmetrosNoBancoDeDados(TransactionEntity transactionEntity) {
+    public void shouldExistTransactionWithParametersInTheDatabase(TransactionEntity transactionEntity) {
         transactionRepository.save(transactionEntity);
     }
 
     @Quando("for requisitada que a transação de id {int} seja apagada")
-    public void forRequisitadaQueATransaçãoDeIdSejaApagada(int transactionId) {
+    public void callDeleteForTransactionId(int transactionId) {
         RestAssured.baseURI = SERVER + serverPort;
 
         final Response response = given()
@@ -48,14 +50,15 @@ public class DeleteTransactionSteps {
     }
 
     @Então("o serviço de apagar deve retornar o status code {int} - {string}")
-    public void oServiçoDeApagarDeveRetornarOStatusCode(int expectedStatusCode, String expectedDesCode) {
+    public void serviceShouldReturnStatusCode(int expectedStatusCode, String expectedDesCode) {
         assertEquals(expectedStatusCode, transactionResponseEntity.getStatusCodeValue());
         assertEquals(expectedDesCode, HttpStatus.valueOf(transactionResponseEntity.getStatusCodeValue()).getReasonPhrase());
     }
 
-    @Então("a transação deve ter sido apagada no banco de dados")
-    public void aTransaçãoDeveTerSidoApagadaNoBancoDeDados() {
-        assertNull(transactionResponseEntity.getBody());
+    @Então("a transação de id {int} deve ter sido apagada no banco de dados")
+    public void transactionShouldBeDeletedInDatabase(long transactionId) {
+        final Optional<TransactionEntity> optionalTransactionEntity = transactionRepository.findById(transactionId);
+        assertFalse(optionalTransactionEntity.isPresent());
     }
 
     private ResponseEntity<Object> createResponseEntityFromResponse(Response response) {
