@@ -45,7 +45,6 @@ class DirtExceptionHandlerTest {
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
-
     }
 
     @Test
