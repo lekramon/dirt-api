@@ -26,7 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -69,6 +72,8 @@ class TransactionServiceTest {
         final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.PENDING);
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
+        verify(accountRepository, times(1)).findById(ACCOUNT_ID);
+        verify(transactionRepository, times(1)).save(any(TransactionEntity.class));
     }
 
     @Test
@@ -80,6 +85,19 @@ class TransactionServiceTest {
         final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.SUCCESS);
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
+        verify(transactionRepository, times(1)).findById(1L);
+        verify(transactionRepository, times(1)).save(any(TransactionEntity.class));
+    }
+
+    @Test
+    public void shouldDeleteTransaction() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.CANCELED)));
+        doNothing().when(transactionRepository).delete(any(TransactionEntity.class));
+
+        transactionService.deleteTransaction(1L);
+
+        verify(transactionRepository, times(1)).findById(1L);
+        verify(transactionRepository, times(1)).delete(any(TransactionEntity.class));
     }
 
     @Test
@@ -91,7 +109,9 @@ class TransactionServiceTest {
         final AccountNotExistException accountNotExistException = assertThrows(AccountNotExistException.class, () -> {
             transactionService.registerTransaction(transactionRequest);
         });
+
         assertEquals(ACCOUNT_NOT_EXIST_MESSAGE, accountNotExistException.getMessage());
+        verify(accountRepository, times(1)).findById(NOT_ACCOUNT_ID);
     }
 
     @Test
@@ -100,10 +120,16 @@ class TransactionServiceTest {
 
         final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
 
-        final TransactionNotExistException transactionNotExistException = assertThrows(TransactionNotExistException.class, () -> {
+        final TransactionNotExistException transactionNotExistExceptionToUpdateStatus = assertThrows(TransactionNotExistException.class, () -> {
             transactionService.updateTransactionStatusById(3L, updateStatusRequest);
         });
-        assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistException.getMessage());
+        final TransactionNotExistException transactionNotExistExceptionToDelete = assertThrows(TransactionNotExistException.class, () -> {
+            transactionService.deleteTransaction(3L);
+        });
+
+        assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistExceptionToUpdateStatus.getMessage());
+        assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistExceptionToDelete.getMessage());
+        verify(transactionRepository, times(2)).findById(3L);
     }
 
     @Test
@@ -115,7 +141,9 @@ class TransactionServiceTest {
         final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
             transactionService.updateTransactionStatusById(1L, updateStatusRequest);
         });
+
         assertEquals(INVALID_STATUS_CANCELED_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
+        verify(transactionRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -127,7 +155,9 @@ class TransactionServiceTest {
         final StatusValidateException statusValidateExceptionSuccess = assertThrows(StatusValidateException.class, () -> {
             transactionService.updateTransactionStatusById(1L, updateStatusRequest);
         });
+
         assertEquals(INVALID_STATUS_SUCCESS_CHANGE_MESSAGE, statusValidateExceptionSuccess.getMessage());
+        verify(transactionRepository, times(1)).findById(1L);
     }
 
     private AccountEntity getAccountEntity() {
