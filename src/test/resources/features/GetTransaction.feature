@@ -65,11 +65,15 @@ Funcionalidade: Listar transações
       | transactionId | transactionIp  | transactionAmount | transactionTax | accountId | accountName | accountDocument | accountNum | accountNumAgency | accountNumBank | accountType | description | captureMethodId | captureMethodType | transactionType | operation | transactionDat             | status  | otherAccountNumber | otherAccountAgency | otherAccountBankCode |
       | 4             | 199.221.36.020 | 800.00            | 0.30           | 4         | Yoda        | 12101738082     | 8496723-0  | 0001             | 290            | F           | Pagto*Ganja | 10066           | WEB               | DOC             | CREDIT    | 2023-08-05 00:00:00.000000 | SUCCESS | 8496723-0          | 0001               | 290                  |
 
+  Cenário: Realizar uma consulta pelo id da transação
+    Dado que uma requisição de consulta de transações com os parâmetros "transactionType" valor "PIX" e "captureMethodType" valor "ATM" seja realizada
+    Então o serviço de listagem deve retornar o status code 200 - "OK"
+    E o conteúdo retornado deve ser vazio
+
     ##Cenários de Erro
   Cenário: Realizar uma consulta com parâmetros inexistentes
     Dado que uma requisição de consulta de transações com os parâmetros "captureMethodType" valor "CAIXA" seja realizada
-    Então o serviço de listagem deve retornar o status code 204 - "No Content"
-    E o conteúdo da resposta deve ser vazio
+    Então o serviço de listagem deve retornar o status code 400 - "Bad Request"
 
   Cenário: Realizar uma consulta com id inexistente
     Dado que uma requisição de consulta com os parâmetros "transactionId" valor "11" seja realizada
