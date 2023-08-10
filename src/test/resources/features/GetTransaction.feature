@@ -76,7 +76,7 @@ Funcionalidade: Listar transações
     Então o serviço de listagem deve retornar o status code 400 - "Bad Request"
 
   Cenário: Realizar uma consulta com id inexistente
-    Quando uma requisição de consulta com os parâmetros "transactionId" valor "11" seja realizada
+    Quando uma requisição de consulta com os parâmetros "transactionId" valor "14" seja realizada
     Então o serviço de listagem deve retornar o status code 404 - "Not Found"
 
   Cenário: Realizar uma consulta com serviço indisponível
