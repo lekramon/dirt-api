@@ -45,6 +45,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - transaction
+      summary: Listar transações
+      operationId: listarTransação
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type:
+
+
 
   /transaction/{id}:
     put:
@@ -105,6 +118,31 @@ paths:
       responses:
         '200':
           description: OK, transação apagada
+        '404':
+          description: Not Found, transação não existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - transaction
+      summary: Listar uma transação pelo ID
+      operationId: listarTransaçãoPeloId
+      parameters:
+        - in: path
+          name: id
+          description: id da transação
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK, transação listada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
         '404':
           description: Not Found, transação não existe
           content:
