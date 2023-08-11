@@ -101,28 +101,27 @@ The application allows you to submit new transactions for registration in the da
 this endpoint, follow these tips:
 
 - **To register a transaction:**
-    - Endpoint: `localhost:15050/transaction`
-    - Method: `POST`
-    - Request Body:
-    ```json
-      { 
-      "ip": "192.158.1.38", 
-      "amount": 99.99, 
-      "tax": 10.11, 
-      "accountId": 1,
-      "description": "Pagto*Manga Zé", 
-      "captureMethod": { 
-        "id": "123", 
-        "type": "WEB" 
-        }, 
-      "transactionType": "PIX", 
-      "operation": "CREDIT", 
-      "otherAccount": { 
-        "number": "1359764-2", 
-        "agency": "0001", 
-        "bankCode": "290" 
-        } 
-      }
+    ```sh 
+  curl --location 'localhost:15050/transaction' \
+    --header 'Content-Type: application/json' \
+    --data '{
+  "ip": "192.158.1.38",
+  "amount": 99.99,
+  "tax": 10.11,
+  "accountId": 1,
+  "description": "Pagto*Manga Zé",
+  "captureMethod": {
+  "id": "123",
+  "type": "WEB"
+  },
+  "transactionType": "PIX",
+  "operation": "CREDIT",
+  "otherAccount": {
+  "number": "1359764-2",
+  "agency": "0001",
+  "bankCode": "290"
+  }
+  }'
     ```
     - Status Code: 201 - CREATED
     - Response:
@@ -157,54 +156,48 @@ this endpoint, follow these tips:
       }
     }
   ```
-- **To update status of transaction:**
-    - Endpoint: `localhost:15050/transaction/{id}`
-    - Method: `PUT`
-    - Request Parameter `{id}`
-        - Description: Transaction ID
-    - Request Body:
-
-    ```json
-      { 
+    - **To update status of transaction:**
+      ```sh
+      curl --location --request PUT 'localhost:15050/transaction/1' \
+      --header 'Content-Type: application/json' \
+      --data '{
       "status": "SUCCESS"
-      }
-    ```
-    - Status Code: 200 - OK
-    - Response:
-  ```json
-    {
-    "transactionId": 1,
-    "transactionIp": "192.158.1.38",
-    "status": "SUCCESS",
-    "transactionAmount": 99.99,
-    "transactionTax": 10.11,
-    "description": "Pagto*Manga Zé",
-    "transactionType": "PIX",
-    "account": {
-      "accountId": 1,
-      "document": "59805714004",
-      "accountName": "Han Solo",
-      "accountNum": "5840231-7",
-      "accountNumAgency": "0001",
-      "accountNumBank": "290",
-      "accountType": "F"
-       },
-    "captureMethod": {
-      "id": "123",
-      "type": "WEB"
-       },
-    "operation": "CREDIT",
-    "otherAccount": {
-      "number": "1359764-2",
-      "agency": "0001",
-      "bankcode": "290"
-      }
-    }
-  ```
+      }'
+      ```
+        - Status Code: 200 - OK
+        - Response:
+      ```json
+        {
+        "transactionId": 1,
+        "transactionIp": "192.158.1.38",
+        "status": "SUCCESS",
+        "transactionAmount": 99.99,
+        "transactionTax": 10.11,
+        "description": "Pagto*Manga Zé",
+        "transactionType": "PIX",
+        "account": {
+          "accountId": 1,
+          "document": "59805714004",
+          "accountName": "Han Solo",
+          "accountNum": "5840231-7",
+          "accountNumAgency": "0001",
+          "accountNumBank": "290",
+          "accountType": "F"
+           },
+        "captureMethod": {
+          "id": "123",
+          "type": "WEB"
+           },
+        "operation": "CREDIT",
+        "otherAccount": {
+          "number": "1359764-2",
+          "agency": "0001",
+          "bankcode": "290"
+          }
+        }
+      ```
 
-- **To delete a transaction:**
-  - Endpoint: `localhost:15050/transaction/{id}`
-  - Method: `DELETE`
-  - Request Parameter `{id}`
-    - Description: Transaction ID
-  - Status Code: 200 - OK
+    - **To delete a transaction:**
+      ```sh 
+      curl -X DELETE localhost:15050/transaction/1
+      ```
