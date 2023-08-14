@@ -215,6 +215,7 @@ curl -X DELETE localhost:15050/transaction/1
 
 - Status Code: 200 - OK
 
+
 - **To GET a transaction by ID:**
 - Request parameters:
     - transactionId: `1`
