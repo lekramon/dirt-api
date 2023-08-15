@@ -159,7 +159,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionListResponse'
+                $ref: '#/components/schemas/TransactionResponse'
         '404':
           description: Not Found, transação não existe
           content:
