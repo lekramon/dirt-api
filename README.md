@@ -264,7 +264,7 @@ curl --location 'localhost:15050/transaction/1' \
     - transactionType: `PIX`
 
 ```sh 
-curl --location 'localhost:15050/transaction/?captureMethodType=WEB&transactionType=PIX' \
+curl --location 'localhost:15050/transaction?captureMethodType=WEB&transactionType=PIX' \
 --data ''
 ```
 
@@ -274,7 +274,7 @@ curl --location 'localhost:15050/transaction/?captureMethodType=WEB&transactionT
 {
   "size": 1,
   "total_size": 1,
-  "page": 1,
+  "page": 0,
   "total_pages": 1,
   "content": [
     {

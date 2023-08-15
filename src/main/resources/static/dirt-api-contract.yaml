@@ -16,7 +16,6 @@ tags:
   - name: transaction
     description: Operações com as transações para a DIRT
 
-
 paths:
   /transaction:
     post:
