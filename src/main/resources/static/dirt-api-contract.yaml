@@ -16,7 +16,6 @@ tags:
   - name: transaction
     description: Operações com as transações para a DIRT
 
-
 paths:
   /transaction:
     post:
@@ -45,6 +44,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - transaction
+      summary: Listar transações
+      operationId: listarTransação
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: captureMethodType
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: transactionType
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionListResponse'
+        '400':
+          description: Bad Request, CaptureMethodType ou TransactionType inválidos
 
   /transaction/{id}:
     put:
@@ -105,6 +134,31 @@ paths:
       responses:
         '200':
           description: OK, transação apagada
+        '404':
+          description: Not Found, transação não existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - transaction
+      summary: Listar uma transação pelo ID
+      operationId: listarTransaçãoPeloId
+      parameters:
+        - in: path
+          name: id
+          description: id da transação
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK, transação listada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
         '404':
           description: Not Found, transação não existe
           content:
@@ -262,6 +316,33 @@ components:
               example: '290'
       xml:
         name: TransactionResponse
+
+    TransactionListResponse:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int32
+          example: 10
+        total_size:
+          type: integer
+          format: int32
+          example: 100
+        page:
+          type: integer
+          format: int32
+          example: 0
+          default: 0
+        total_pages:
+          type: integer
+          format: int32
+          example: 100
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+      xml:
+        name: TransactionListResponse
 
     ErrorResponse:
       type: object
