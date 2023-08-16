@@ -40,6 +40,10 @@ public class TransactionService {
         transactionRepository.delete(transactionEntity);
     }
 
+    public TransactionEntity getTransactionById(long transactionId) {
+        return getTransactionEntityById(transactionId);
+    }
+
     private AccountEntity getAccountEntityById(long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotExistException("This account id: " + accountId + " doesn't exist"));
