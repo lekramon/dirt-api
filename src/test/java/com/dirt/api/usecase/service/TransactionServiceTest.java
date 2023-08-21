@@ -26,11 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 class TransactionServiceTest {
@@ -101,6 +97,17 @@ class TransactionServiceTest {
     }
 
     @Test
+    public void shouldGetTransactionById() {
+        when(transactionRepository.findById(anyLong())).thenReturn(Optional.of(getTransactionEntity(StatusEnum.SUCCESS)));
+
+        final TransactionEntity actualTransactionEntity = transactionService.getTransactionById(1L);
+        final TransactionEntity expectedTransactionEntity = getTransactionEntity(StatusEnum.SUCCESS);
+
+        assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
+        verify(transactionRepository, times(1)).findById(1L);
+    }
+
+    @Test
     public void shouldThrowAccountNotExistException() {
         when(accountRepository.findById(NOT_ACCOUNT_ID)).thenReturn(Optional.empty());
 
@@ -126,10 +133,14 @@ class TransactionServiceTest {
         final TransactionNotExistException transactionNotExistExceptionToDelete = assertThrows(TransactionNotExistException.class, () -> {
             transactionService.deleteTransaction(3L);
         });
+        final TransactionNotExistException transactionNotExistExceptionToGetById = assertThrows(TransactionNotExistException.class, () -> {
+            transactionService.getTransactionById(3L);
+        });
 
         assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistExceptionToUpdateStatus.getMessage());
         assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistExceptionToDelete.getMessage());
-        verify(transactionRepository, times(2)).findById(3L);
+        assertEquals(TRANSACTION_NOT_EXIST_MESSAGE, transactionNotExistExceptionToGetById.getMessage());
+        verify(transactionRepository, times(3)).findById(3L);
     }
 
     @Test

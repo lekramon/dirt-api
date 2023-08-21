@@ -25,11 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class TransactionControllerTest {
 
@@ -89,6 +85,18 @@ class TransactionControllerTest {
         assertEquals(expectedStatusCode, actualResponseEntity.getStatusCode());
         assertNull(actualResponseEntity.getBody());
         verify(transactionService, times(1)).deleteTransaction(1L);
+    }
+
+    @Test
+    public void shouldGetTransactionById() {
+        when(transactionService.getTransactionById(anyLong())).thenReturn(getTransactionEntity(StatusEnum.SUCCESS));
+
+        final ResponseEntity<TransactionResponse> actualTransactionResponse = transactionController.getTransactionById(1L);
+        final ResponseEntity<TransactionResponse> expectedTransactionResponse = getResponseEntityTransaction(getTransactionResponse("SUCCESS"), HttpStatus.OK);
+
+        assertEquals(expectedTransactionResponse.getStatusCode(), actualTransactionResponse.getStatusCode());
+        assertThat(actualTransactionResponse.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionResponse.getBody());
+        verify(transactionService, times(1)).getTransactionById(anyLong());
     }
 
     private ResponseEntity<TransactionResponse> getResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
