@@ -17,7 +17,7 @@ tags:
     description: Operações com as transações para a DIRT
 
 paths:
-  /transaction:
+  /transactions:
     post:
       tags:
         - transaction
@@ -75,7 +75,7 @@ paths:
         '400':
           description: Bad Request, CaptureMethodType ou TransactionType inválidos
 
-  /transaction/{id}:
+  /transactions/{id}:
     put:
       tags:
         - transaction

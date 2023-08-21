@@ -103,7 +103,7 @@ this endpoint, follow these tips:
 - **To POST a transaction:**
 
 ```sh 
-curl --location 'localhost:15050/transaction' \
+curl --location 'localhost:15050/transactions' \
   --header 'Content-Type: application/json' \
   --data '{
     "ip": "192.158.1.38",
@@ -164,7 +164,7 @@ curl --location 'localhost:15050/transaction' \
     - transactionId: `1`
 
 ```sh
-curl --location --request PUT 'localhost:15050/transaction/1' \
+curl --location --request PUT 'localhost:15050/transactions/1' \
   --header 'Content-Type: application/json' \
   --data '{
     "status": "SUCCESS"
@@ -210,7 +210,7 @@ curl --location --request PUT 'localhost:15050/transaction/1' \
     - transactionId: `1`
 
 ```sh 
-curl -X DELETE localhost:15050/transaction/1
+curl -X DELETE localhost:15050/transactions/1
 ```
 
 - Status Code: 200 - OK
@@ -221,7 +221,7 @@ curl -X DELETE localhost:15050/transaction/1
     - transactionId: `1`
 
 ```sh 
-curl --location 'localhost:15050/transaction/1' \
+curl --location 'localhost:15050/transactions/1' \
 --data ''
 ```
 
@@ -264,7 +264,7 @@ curl --location 'localhost:15050/transaction/1' \
     - transactionType: `PIX`
 
 ```sh 
-curl --location 'localhost:15050/transaction?captureMethodType=WEB&transactionType=PIX' \
+curl --location 'localhost:15050/transactions?captureMethodType=WEB&transactionType=PIX' \
 --data ''
 ```
 

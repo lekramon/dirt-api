@@ -42,7 +42,7 @@ public class DeleteTransactionSteps {
                 .header("Content-type", "application/json")
                 .and()
                 .when()
-                .delete("/transaction/" + transactionId)
+                .delete("/transactions/" + transactionId)
                 .then()
                 .extract().response();
 

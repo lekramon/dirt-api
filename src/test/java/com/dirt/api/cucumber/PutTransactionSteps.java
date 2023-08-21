@@ -46,7 +46,7 @@ public class PutTransactionSteps {
                 .and()
                 .body(getUpdateStatusRequest(status))
                 .when()
-                .put("/transaction/" + transactionId)
+                .put("/transactions/" + transactionId)
                 .then()
                 .extract().response();
 
