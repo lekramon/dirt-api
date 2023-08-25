@@ -3,6 +3,7 @@ package com.dirt.api.usecase.service;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.request.TransactionSearch;
 import com.dirt.api.adapter.dto.request.UpdateStatusRequest;
 import com.dirt.api.adapter.repository.AccountRepository;
 import com.dirt.api.adapter.repository.TransactionRepository;
@@ -13,12 +14,20 @@ import com.dirt.api.domain.enums.OperationEnum;
 import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.domain.exception.AccountNotExistException;
+import com.dirt.api.domain.exception.InvalidPageException;
 import com.dirt.api.domain.exception.StatusValidateException;
 import com.dirt.api.domain.exception.TransactionNotExistException;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -54,6 +63,11 @@ class TransactionServiceTest {
     private static final String INVALID_STATUS_CANCELED_CHANGE_MESSAGE = "Cannot update CANCELED transaction";
     private static final String INVALID_STATUS_SUCCESS_CHANGE_MESSAGE = "Cannot update SUCCESS transaction";
     private static final String ACCOUNT_NOT_EXIST_MESSAGE = "This account id: 999 doesn't exist";
+    private static final String INVALID_PAGE_MESSAGE = "Page index must not be less than zero";
+    private static final int SIZE = 1;
+    private static final long TOTAL_SIZE = 1;
+    private static final int PAGE = 0;
+    private static final int TOTAL_PAGES = 1;
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
     private final AccountRepository accountRepository = mock(AccountRepository.class);
@@ -105,6 +119,17 @@ class TransactionServiceTest {
 
         assertThat(actualTransactionEntity).usingRecursiveComparison().isEqualTo(expectedTransactionEntity);
         verify(transactionRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    public void shouldGetTransactionList() {
+        when(transactionRepository.findAll(any(BooleanExpression.class), any(Pageable.class))).thenReturn(getTransactionPage());
+
+        final Page<TransactionEntity> actualTransactionEntityPage = transactionService.getTransactionList(PAGE, getTransactionSearch());
+        final Page<TransactionEntity> expectedTransactionEntityPage = getTransactionPage();
+
+        assertThat(actualTransactionEntityPage).usingRecursiveComparison().isEqualTo(expectedTransactionEntityPage);
+        verify(transactionRepository, times(1)).findAll(any(BooleanExpression.class), any(Pageable.class));
     }
 
     @Test
@@ -171,6 +196,17 @@ class TransactionServiceTest {
         verify(transactionRepository, times(1)).findById(1L);
     }
 
+    @Test
+    public void shouldThrowInvalidPageException() {
+        final TransactionSearch transactionSearch = getTransactionSearch();
+
+        final InvalidPageException invalidPageException = assertThrows(InvalidPageException.class, () -> {
+            transactionService.getTransactionList(-1, transactionSearch);
+        });
+
+        assertEquals(INVALID_PAGE_MESSAGE, invalidPageException.getMessage());
+    }
+
     private AccountEntity getAccountEntity() {
         final AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccountId(ACCOUNT_ID);
@@ -226,10 +262,21 @@ class TransactionServiceTest {
     }
 
     private UpdateStatusRequest getUpdateStatusRequest(String status) {
-        UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+        final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
 
         updateStatusRequest.setStatus(status);
 
         return updateStatusRequest;
     }
+
+    private TransactionSearch getTransactionSearch() {
+        return new TransactionSearch("APP", "PIX");
+    }
+
+    private Page<TransactionEntity> getTransactionPage() {
+        final Pageable pageable = PageRequest.of(0, 10);
+        final List<TransactionEntity> transactionEntityList = Collections.singletonList(getTransactionEntity(StatusEnum.SUCCESS));
+        return new PageImpl<TransactionEntity>(transactionEntityList, pageable, 1);
+    }
+
 }

@@ -3,8 +3,10 @@ package com.dirt.api.adapter.controller;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.request.TransactionRequest;
+import com.dirt.api.adapter.dto.request.TransactionSearch;
 import com.dirt.api.adapter.dto.request.UpdateStatusRequest;
 import com.dirt.api.adapter.dto.response.AccountResponse;
+import com.dirt.api.adapter.dto.response.TransactionListResponse;
 import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.domain.entity.AccountEntity;
 import com.dirt.api.domain.entity.TransactionEntity;
@@ -14,11 +16,17 @@ import com.dirt.api.domain.enums.StatusEnum;
 import com.dirt.api.domain.enums.TransactionTypeEnum;
 import com.dirt.api.usecase.service.TransactionService;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,6 +55,10 @@ class TransactionControllerTest {
     private static final String TRANSACTION_OTHER_ACCOUNT = "123456789";
     private static final String TRANSACTION_OTHER_ACCOUNT_AGENCY = "0001";
     private static final String TRANSACTION_OTHER_ACCOUNT_BANK = "290";
+    private static final int SIZE = 1;
+    private static final long TOTAL_SIZE = 1;
+    private static final int PAGE = 0;
+    private static final int TOTAL_PAGES = 1;
 
     private final TransactionService transactionService = mock(TransactionService.class);
     private final TransactionController transactionController = new TransactionController(transactionService);
@@ -99,8 +111,24 @@ class TransactionControllerTest {
         verify(transactionService, times(1)).getTransactionById(anyLong());
     }
 
+    @Test
+    public void shouldGetTransactionList() {
+        when(transactionService.getTransactionList(anyInt(), any(TransactionSearch.class))).thenReturn(getTransactionPage());
+
+        final ResponseEntity<TransactionListResponse> actualTransactionListResponseEntity = transactionController.getTransactionsList(PAGE, "APP", "PIX");
+        final ResponseEntity<TransactionListResponse> expectedTransactionListResponseEntity = getResponseEntityTransactionList(getTransactionListResponse(), HttpStatus.OK);
+
+        assertEquals(expectedTransactionListResponseEntity.getStatusCode(), actualTransactionListResponseEntity.getStatusCode());
+        assertThat(actualTransactionListResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedTransactionListResponseEntity.getBody());
+        verify(transactionService, times(1)).getTransactionList(anyInt(), any(TransactionSearch.class));
+    }
+
     private ResponseEntity<TransactionResponse> getResponseEntityTransaction(TransactionResponse transactionResponse, HttpStatus status) {
         return ResponseEntity.status(status).body(transactionResponse);
+    }
+
+    private ResponseEntity<TransactionListResponse> getResponseEntityTransactionList(TransactionListResponse transactionListResponse, HttpStatus status) {
+        return ResponseEntity.status(status).body(transactionListResponse);
     }
 
     private AccountEntity getAccountEntity() {
@@ -190,10 +218,22 @@ class TransactionControllerTest {
     }
 
     private UpdateStatusRequest getUpdateStatusRequest(String status) {
-        UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
+        final UpdateStatusRequest updateStatusRequest = new UpdateStatusRequest();
 
         updateStatusRequest.setStatus(status);
 
         return updateStatusRequest;
+    }
+
+    private TransactionListResponse getTransactionListResponse() {
+        final List<TransactionResponse> transactionResponseList = Collections.singletonList(getTransactionResponse("SUCCESS"));
+
+        return new TransactionListResponse(SIZE, TOTAL_SIZE, PAGE, TOTAL_PAGES, transactionResponseList);
+    }
+
+    private Page<TransactionEntity> getTransactionPage() {
+        final Pageable pageable = PageRequest.of(0, 10);
+        final List<TransactionEntity> transactionEntityList = Collections.singletonList(getTransactionEntity(StatusEnum.SUCCESS));
+        return new PageImpl<TransactionEntity>(transactionEntityList, pageable, 1);
     }
 }
