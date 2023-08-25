@@ -3,8 +3,13 @@ package com.dirt.api.usecase.factory;
 import com.dirt.api.adapter.dto.CaptureMethodDto;
 import com.dirt.api.adapter.dto.OtherAccountDto;
 import com.dirt.api.adapter.dto.response.AccountResponse;
+import com.dirt.api.adapter.dto.response.TransactionListResponse;
 import com.dirt.api.adapter.dto.response.TransactionResponse;
 import com.dirt.api.domain.entity.TransactionEntity;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransactionResponseFactory {
 
@@ -45,5 +50,10 @@ public class TransactionResponseFactory {
         transactionResponse.setOtherAccount(otherAccountDto);
 
         return transactionResponse;
+    }
+
+    public static TransactionListResponse createListTransactionResponse(Page<TransactionEntity> transactionEntityPage) {
+        final List<TransactionResponse> transactionResponseList = transactionEntityPage.stream().map(TransactionResponseFactory::createTransactionResponse).collect(Collectors.toList());
+        return new TransactionListResponse(transactionResponseList.size(), transactionEntityPage.getNumberOfElements(), transactionEntityPage.getNumber(), transactionEntityPage.getTotalPages(), transactionResponseList);
     }
 }
