@@ -222,7 +222,7 @@ curl -X DELETE localhost:15050/transactions/1
 
 ```sh 
 curl --location 'localhost:15050/transactions/1' \
---data ''
+-H "Accept: application/json"
 ```
 
 - Response:
@@ -265,7 +265,7 @@ curl --location 'localhost:15050/transactions/1' \
 
 ```sh 
 curl --location 'localhost:15050/transactions?captureMethodType=WEB&transactionType=PIX' \
---data ''
+-H "Accept: application/json"
 ```
 
 - Response:
