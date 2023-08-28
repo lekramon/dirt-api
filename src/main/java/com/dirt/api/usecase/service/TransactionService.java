@@ -42,18 +42,19 @@ public class TransactionService {
     }
 
     public TransactionEntity updateTransactionStatusById(long transactionId, UpdateStatusRequest updateStatusRequest) {
-        final TransactionEntity transactionEntity = getTransactionEntityById(transactionId);
+        final TransactionEntity transactionEntity = getTransactionById(transactionId);
         validateStatusTransaction(transactionEntity.getStatus());
         return transactionRepository.save(updateTransactionStatus(updateStatusRequest, transactionEntity));
     }
 
     public void deleteTransaction(long transactionId) {
-        final TransactionEntity transactionEntity = getTransactionEntityById(transactionId);
+        final TransactionEntity transactionEntity = getTransactionById(transactionId);
         transactionRepository.delete(transactionEntity);
     }
 
     public TransactionEntity getTransactionById(long transactionId) {
-        return getTransactionEntityById(transactionId);
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + transactionId + " doesn't exist"));
     }
 
     public Page<TransactionEntity> getTransactionList(int page, TransactionSearch transactionSearch) {
@@ -65,11 +66,6 @@ public class TransactionService {
     private AccountEntity getAccountEntityById(long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotExistException("This account id: " + accountId + " doesn't exist"));
-    }
-
-    private TransactionEntity getTransactionEntityById(long transactionId) {
-        return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new TransactionNotExistException("This transaction id: " + transactionId + " doesn't exist"));
     }
 
     private TransactionEntity updateTransactionStatus(UpdateStatusRequest updateStatusRequest, TransactionEntity transactionEntity) {
