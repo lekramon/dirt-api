@@ -35,11 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 class TransactionServiceTest {
@@ -69,13 +65,11 @@ class TransactionServiceTest {
     private static final String ACCOUNT_NOT_EXIST_MESSAGE = "This account id: 999 doesn't exist";
     private static final String INVALID_PAGE_MESSAGE = "Page index must not be less than zero";
     private static final int SIZE = 1;
-    private static final long TOTAL_SIZE = 1;
     private static final int PAGE = 0;
-    private static final int TOTAL_PAGES = 1;
 
     private final TransactionRepository transactionRepository = mock(TransactionRepository.class);
     private final AccountRepository accountRepository = mock(AccountRepository.class);
-    private final TransactionService transactionService = new TransactionService(transactionRepository, accountRepository);
+    private final TransactionService transactionService = new TransactionService(transactionRepository, accountRepository, 10);
 
     @Test
     public void shouldRegisterTransaction() {
@@ -278,7 +272,7 @@ class TransactionServiceTest {
     }
 
     private Page<TransactionEntity> getTransactionPage() {
-        final Pageable pageable = PageRequest.of(0, 10);
+        final Pageable pageable = PageRequest.of(0, SIZE);
         final List<TransactionEntity> transactionEntityList = Collections.singletonList(getTransactionEntity(StatusEnum.SUCCESS));
         return new PageImpl<TransactionEntity>(transactionEntityList, pageable, 1);
     }

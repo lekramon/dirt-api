@@ -16,6 +16,7 @@ import com.dirt.api.usecase.factory.TransactionFactory;
 import com.dirt.api.usecase.factory.TransactionSearchPredicateFactory;
 import com.dirt.api.usecase.validator.TransactionSearchValidator;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +26,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionService {
 
-    private static final int SIZE = 10;
+    private final int pageSize;
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, @Value("${spring.data.web.pageable.default-page-size}") int pageSize) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
+        this.pageSize = pageSize;
     }
 
     public TransactionEntity registerTransaction(TransactionRequest transactionRequest) {
@@ -56,7 +58,7 @@ public class TransactionService {
     }
 
     public Page<TransactionEntity> getTransactionList(int page, TransactionSearch transactionSearch) {
-        final Pageable pageable = PageRequest.of(validatePage(page), SIZE, Sort.Direction.DESC, "transactionId");
+        final Pageable pageable = PageRequest.of(validatePage(page), pageSize, Sort.Direction.DESC, "transactionId");
         final BooleanExpression predicate = TransactionSearchPredicateFactory.createPredicate(TransactionSearchValidator.validate(transactionSearch));
         return transactionRepository.findAll(predicate, pageable);
     }
