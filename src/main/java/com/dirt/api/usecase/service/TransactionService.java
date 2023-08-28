@@ -14,7 +14,6 @@ import com.dirt.api.domain.exception.StatusValidateException;
 import com.dirt.api.domain.exception.TransactionNotExistException;
 import com.dirt.api.usecase.factory.TransactionFactory;
 import com.dirt.api.usecase.factory.TransactionSearchPredicateFactory;
-import com.dirt.api.usecase.validator.TransactionSearchValidator;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -59,7 +58,7 @@ public class TransactionService {
 
     public Page<TransactionEntity> getTransactionList(int page, TransactionSearch transactionSearch) {
         final Pageable pageable = PageRequest.of(validatePage(page), pageSize, Sort.Direction.DESC, "transactionId");
-        final BooleanExpression predicate = TransactionSearchPredicateFactory.createPredicate(TransactionSearchValidator.validate(transactionSearch));
+        final BooleanExpression predicate = TransactionSearchPredicateFactory.createPredicate(transactionSearch);
         return transactionRepository.findAll(predicate, pageable);
     }
 
