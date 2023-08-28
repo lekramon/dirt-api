@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionService {
 
+    private static final int SIZE = 10;
+
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
@@ -54,7 +56,7 @@ public class TransactionService {
     }
 
     public Page<TransactionEntity> getTransactionList(int page, TransactionSearch transactionSearch) {
-        final Pageable pageable = PageRequest.of(validatePage(page), 10, Sort.Direction.DESC, "transactionId");
+        final Pageable pageable = PageRequest.of(validatePage(page), SIZE, Sort.Direction.DESC, "transactionId");
         final BooleanExpression predicate = TransactionSearchPredicateFactory.createPredicate(TransactionSearchValidator.validate(transactionSearch));
         return transactionRepository.findAll(predicate, pageable);
     }
