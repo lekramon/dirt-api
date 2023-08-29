@@ -3,6 +3,7 @@ package com.dirt.api.adapter.controller;
 import com.dirt.api.adapter.dto.response.ErrorResponse;
 import com.dirt.api.domain.exception.AccountNotExistException;
 import com.dirt.api.domain.exception.EnumNotExistException;
+import com.dirt.api.domain.exception.InvalidPageException;
 import com.dirt.api.domain.exception.StatusValidateException;
 import com.dirt.api.domain.exception.TransactionNotExistException;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,17 @@ class DirtExceptionHandlerTest {
 
         final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.NOT_ACCEPTABLE);
         final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleNotAcceptableException(exception);
+
+        assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
+        assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());
+    }
+
+    @Test
+    public void shouldHandleInvalidPageException() {
+        final InvalidPageException exception = new InvalidPageException("message");
+
+        final ResponseEntity<ErrorResponse> expectedResponseEntity = getErrorResponseEntity(exception, HttpStatus.BAD_REQUEST);
+        final ResponseEntity<ErrorResponse> actualResponseEntity = dirtExceptionHandler.handleBadRequestException(exception);
 
         assertEquals(expectedResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode());
         assertThat(actualResponseEntity.getBody()).usingRecursiveComparison().isEqualTo(expectedResponseEntity.getBody());

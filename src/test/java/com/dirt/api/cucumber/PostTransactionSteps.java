@@ -55,7 +55,7 @@ public class PostTransactionSteps {
                 .and()
                 .body(transaction)
                 .when()
-                .post("/transaction")
+                .post("/transactions")
                 .then()
                 .extract().response();
 

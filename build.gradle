@@ -19,6 +19,11 @@ dependencies {
     implementation group: 'com.oracle.database.jdbc', name: 'ojdbc8', version: '12.2.0.1'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.18.0'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
+    implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jpa"
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '7.11.2'
     testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.11.2'
     testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '7.11.2'
