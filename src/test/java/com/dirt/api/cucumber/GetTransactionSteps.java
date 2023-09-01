@@ -19,6 +19,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GetTransactionSteps {
 
@@ -97,10 +98,11 @@ public class GetTransactionSteps {
     }
 
     @Então("o conteúdo retornado deve ser vazio")
-    public void thenReturnNullContent() {
+    public void thenReturnEmptyContent() {
         final TransactionListResponse actualTransactionListResponse = (TransactionListResponse) transactionListResponseEntity.getBody();
         assert actualTransactionListResponse != null;
         assertEquals(0, actualTransactionListResponse.getTotalSize());
+        assertTrue(actualTransactionListResponse.getTransactionResponseList().isEmpty());
     }
 
     private ResponseEntity<Object> createListResponseEntityFromResponse(Response response) {
